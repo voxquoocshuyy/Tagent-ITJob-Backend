@@ -1,0 +1,138 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob-Business/ITJob-Business.csproj": {}
+  },
+  "projects": {
+    "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob-Business/ITJob-Business.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob-Business/ITJob-Business.csproj",
+        "projectName": "ITJob.Services",
+        "projectPath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob-Business/ITJob-Business.csproj",
+        "packagesPath": "/Users/quochuy/.nuget/packages/",
+        "outputPath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob-Business/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/quochuy/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/ITJob.Entity.csproj": {
+                "projectPath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/ITJob.Entity.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[11.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/ITJob.Entity.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/ITJob.Entity.csproj",
+        "projectName": "ITJob.Entity",
+        "projectPath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/ITJob.Entity.csproj",
+        "packagesPath": "/Users/quochuy/.nuget/packages/",
+        "outputPath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/quochuy/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

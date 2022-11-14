@@ -1,0 +1,14 @@
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/bin/Debug/net6.0/ITJob.Entity.deps.json
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/bin/Debug/net6.0/ITJob.Entity.runtimeconfig.json
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/bin/Debug/net6.0/ITJob.Entity.dll
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/bin/Debug/net6.0/ITJob.Entity.pdb
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.csproj.AssemblyReference.cache
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.GeneratedMSBuildEditorConfig.editorconfig
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.AssemblyInfoInputs.cache
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.AssemblyInfo.cs
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.csproj.CoreCompileInputs.cache
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.dll
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/refint/ITJob.Entity.dll
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.pdb
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ITJob.Entity.genruntimeconfig.cache
+/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/obj/Debug/net6.0/ref/ITJob.Entity.dll
