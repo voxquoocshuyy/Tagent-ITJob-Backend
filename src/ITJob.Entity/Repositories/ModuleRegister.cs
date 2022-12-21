@@ -3,6 +3,7 @@ using ITJob.Entity.Repositories.ApplicantRepositories;
 using ITJob.Entity.Repositories.BlockRepositories;
 using ITJob.Entity.Repositories.CertificateRepositories;
 using ITJob.Entity.Repositories.CompanyRepositories;
+using ITJob.Entity.Repositories.EmployeeRepositories;
 using ITJob.Entity.Repositories.JobPositionRepositories;
 using ITJob.Entity.Repositories.JobPostRepositories;
 using ITJob.Entity.Repositories.JobPostSkillRepositories;
@@ -55,5 +56,6 @@ public static class ModuleRegister
         services.AddScoped<ITransactionRepository, TransactionRepository>();
         services.AddScoped<ITransactionJobPostRepository, TransactionJobPostRepository>();
         services.AddScoped<ISystemWalletRepository, SystemWalletRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
     }
 }

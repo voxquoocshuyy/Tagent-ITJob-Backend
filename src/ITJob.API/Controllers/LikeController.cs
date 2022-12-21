@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJob.API.Controllers;
+/// <summary>
+/// 
+/// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/likes")]
@@ -14,6 +17,10 @@ public class LikeController : ControllerBase
 {
     private readonly ILikeService _likeService;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="likeService"></param>
     public LikeController(ILikeService likeService)
     {
         _likeService = likeService;
@@ -53,6 +60,65 @@ public class LikeController : ControllerBase
                 Total = total
             },
         });
+    }
+    /// <summary>
+    /// [Guest] Endpoint for get all like with condition
+    /// </summary>
+    /// <param name="searchLikeModel"></param>
+    /// <param name="paginationModel">An object contains paging criteria</param>
+    /// <returns>List of like</returns>
+    /// <response code="200">Returns the list of like</response>
+    /// <response code="204">Returns if list of like is empty</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpGet("date")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ModelsResponse<GetLikeDetail>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllDateLike(
+        [FromQuery]PagingParam<LikeEnum.LikeSort> paginationModel, 
+        [FromQuery]SearchLikeModel searchLikeModel)
+    {
+        IList<GetLikeDetail> result = _likeService.GetLikeDatePage(paginationModel, searchLikeModel);
+        int total = result.ToList().Count;
+        if (!result.Any())
+        {
+            return NoContent();
+        }
+
+        return Ok(new ModelsResponse<GetLikeDetail>()
+        {
+            Code = StatusCodes.Status200OK,
+            Msg = "Use API get like page success!",
+            Data = result.ToList(),
+            Paging = new PagingMetadata()
+            {
+                Page = paginationModel.Page,
+                Size = paginationModel.PageSize,
+                Total = total
+            },
+        });
+    }
+    /// <summary>
+    /// [Guest] Endpoint for get all like with condition
+    /// </summary>
+    /// <param name="searchLikeModel"></param>
+    /// <param name="paginationModel">An object contains paging criteria</param>
+    /// <returns>List of like</returns>
+    /// <response code="200">Returns the list of like</response>
+    /// <response code="204">Returns if list of like is empty</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpGet("company-date")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllCompanyDateLike(
+        [FromQuery]PagingParam<LikeEnum.LikeSort> paginationModel, 
+        [FromQuery]SearchLikeModel searchLikeModel)
+    {
+        int result = _likeService.GetLikeDateCompanyPage(paginationModel, searchLikeModel);
+        if (result == 0)
+        {
+            return NoContent();
+        }
+
+        return Ok(result);
     }
     
     /// <summary>

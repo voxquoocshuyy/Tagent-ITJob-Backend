@@ -7,6 +7,11 @@ namespace ITJob.Services.Services.LikeServices;
 public interface ILikeService
 {
     IList<GetLikeDetail> GetLikePage(PagingParam<LikeEnum.LikeSort> paginationModel, SearchLikeModel searchLikeModel);
+
+    public IList<GetLikeDetail> GetLikeDatePage(PagingParam<LikeEnum.LikeSort> paginationModel,
+        SearchLikeModel searchLikeModel);
+
+    public int GetLikeDateCompanyPage(PagingParam<LikeEnum.LikeSort> paginationModel, SearchLikeModel searchLikeModel);
     public Task<GetLikeDetail> GetLikeById(Guid id);
     public Task<GetLikeDetail> CreateLikeAsync(CreateLikeModel requestBody);
     public Task<GetLikeDetail> UpdateLikeAsync(Guid id, UpdateLikeModel requestBody);

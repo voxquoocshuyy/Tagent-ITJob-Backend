@@ -1,3 +1,9 @@
+using ITJob.Services.ViewModels.AlbumImage;
+using ITJob.Services.ViewModels.JobPosition;
+using ITJob.Services.ViewModels.JobPostSkill;
+using ITJob.Services.ViewModels.Like;
+using ITJob.Services.ViewModels.WorkingStyle;
+
 namespace ITJob.Services.ViewModels.JobPost;
 
 public class GetJobPostDetail
@@ -16,4 +22,12 @@ public class GetJobPostDetail
     public DateTime? EndTime { get; set; }
     public string? Reason { get; set; }
     public DateTime? ApproveDate { get; set; }
+    public double? Money { get; set; }
+    public Guid? EmployeeId { get; set; }
+    // public virtual Entity.Entities.Company? Company { get; set; }
+    public virtual GetJobPositionDetail JobPosition { get; set; }
+    public virtual GetWorkingStyleDetail WorkingStyle { get; set; }
+    public virtual ICollection<GetAlbumImageDetail> AlbumImages { get; set; }
+    public virtual ICollection<GetJobPostSkillDetail> JobPostSkills { get; set; }
+    // public virtual ICollection<GetLikeDetail> Likes { get; set; }
 }

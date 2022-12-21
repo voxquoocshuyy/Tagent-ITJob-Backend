@@ -7,6 +7,7 @@ public class CreateCompanyModel : FileViewModel
 {
     public string Email { get; set; } = null!;
     public string Phone { get; set; } = null!;
+    public string? Password { get; set; }
     public string Website { get; set; } = null!;
     public string? Name { get; set; }
     public string? Description { get; set; }

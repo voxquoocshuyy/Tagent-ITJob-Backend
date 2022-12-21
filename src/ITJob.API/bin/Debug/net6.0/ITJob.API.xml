@@ -81,6 +81,15 @@
             <response code="201">Returns the album image</response>
             <response code="403">Return if token is access denied</response>
         </member>
+        <member name="M:ITJob.API.Controllers.AlbumImageController.CreateAlbumImage(ITJob.Services.ViewModels.AlbumImage.CreateAlbumImageUrlModel)">
+            <summary>
+            [Admin] Endpoint for create album image
+            </summary>
+            <param name="requestBody">An obj contains input info of a album image.</param>
+            <returns>A album image within status 201 or error status.</returns>
+            <response code="201">Returns the album image</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
         <member name="M:ITJob.API.Controllers.AlbumImageController.UpdateAlbumImageAsync(System.Guid,ITJob.Services.ViewModels.AlbumImage.UpdateAlbumImageModel)">
             <summary>
             [Admin] Endpoint for Admin edit album image.
@@ -153,7 +162,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ApplicantController.CreateApplicant(ITJob.Services.ViewModels.Applicant.CreateApplicantModel)">
             <summary>
-            [Admin] Endpoint for create applicant
+            [Applicant] Endpoint for create applicant
             </summary>
             <param name="requestBody">An obj contains input info of a applicant.</param>
             <returns>A applicant within status 201 or error status.</returns>
@@ -162,7 +171,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ApplicantController.UpdateApplicantAsync(System.Guid,ITJob.Services.ViewModels.Applicant.UpdateApplicantModel)">
             <summary>
-            [Admin] Endpoint for Admin edit applicant.
+            [Applicant] Endpoint for edit applicant.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of a applicant.</param>
@@ -172,7 +181,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ApplicantController.UpdateApplicantToEarn(System.Guid,ITJob.Services.ViewModels.Applicant.UpdateEarnMoneyApplicantModel)">
             <summary>
-            [Admin] Endpoint for Admin edit applicant for earn money.
+            [Applicant] Endpoint for edit applicant for earn money.
             </summary>
             <param name="id"></param>
             <param name="requestBody"></param>
@@ -182,7 +191,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ApplicantController.UpdatePasswordApplicantAsync(System.Guid,System.String,System.String)">
             <summary>
-            [User] Endpoint for applicant edit password.
+            [Applicant] Endpoint for applicant edit password.
             </summary>
             <param name="id"></param>
             <param name="currentPassword"></param>
@@ -191,9 +200,9 @@
             <response code="200">Returns applicant after update</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ApplicantController.ForgetPasswordApplicantAsync(System.String,System.String,System.String)">
+        <member name="M:ITJob.API.Controllers.ApplicantController.ForgetPasswordApplicantAsync(System.String,System.Int32,System.String)">
             <summary>
-            [User] Endpoint for applicant reset password.
+            [Applicant] Endpoint for applicant reset password.
             </summary>
             <param name="otp"></param>
             <param name="newPassword"></param>
@@ -202,11 +211,12 @@
             <response code="200">Returns applicant after update</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ApplicantController.DeleteClassAsync(System.Guid)">
+        <member name="M:ITJob.API.Controllers.ApplicantController.DeleteClassAsync(System.Guid,ITJob.Services.ViewModels.Company.UpdateReason)">
             <summary>
             [Admin] Endpoint for Admin Delete an applicant.
             </summary>
             <param name="id">ID of applicant</param>
+            <param name="updateReason"></param>
             <returns>An applicant within status 200 or 204 status.</returns>
             <response code="200">Returns 200 status</response>
             <response code="204">Returns NoContent status</response>
@@ -234,7 +244,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.BlockController.CreateBlock(ITJob.Services.ViewModels.Block.CreateBlockModel)">
             <summary>
-            [Admin] Endpoint for create block
+            [Applicant] Endpoint for create block
             </summary>
             <param name="requestBody">An obj contains input info of a block.</param>
             <returns>A block within status 201 or error status.</returns>
@@ -243,7 +253,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.BlockController.UpdateBlockAsync(System.Guid,ITJob.Services.ViewModels.Block.UpdateBlockModel)">
             <summary>
-            [Admin] Endpoint for Admin edit block.
+            [Applicant] Endpoint for edit block.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of a block.</param>
@@ -253,7 +263,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.BlockController.DeleteClassAsync(System.Guid)">
             <summary>
-            [Admin] Endpoint for Admin Delete a block.
+            [Applicant] Endpoint for Admin Delete a block.
             </summary>
             <param name="id">ID of block</param>
             <returns>A block within status 200 or 204 status.</returns>
@@ -283,7 +293,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.CertificateController.CreateCertificate(ITJob.Services.ViewModels.Certificate.CreateCertificateModel)">
             <summary>
-            [Admin] Endpoint for create certificate
+            [Applicant] Endpoint for create certificate
             </summary>
             <param name="requestBody">An obj contains input info of an certificate.</param>
             <returns>A certificate within status 201 or error status.</returns>
@@ -292,7 +302,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.CertificateController.UpdateCertificateAsync(System.Guid,ITJob.Services.ViewModels.Certificate.UpdateCertificateModel)">
             <summary>
-            [Admin] Endpoint for Admin edit certificate.
+            [Applicant] Endpoint for edit certificate.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of an certificate.</param>
@@ -302,7 +312,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.CertificateController.DeleteClassAsync(System.Guid)">
             <summary>
-            [Admin] Endpoint for Admin Delete a certificate.
+            [Applicant] Endpoint for delete a certificate.
             </summary>
             <param name="id">ID of certificate</param>
             <returns>A certificate within status 200 or 204 status.</returns>
@@ -341,9 +351,19 @@
             <response code="204">Returns if the company is not exist</response>
             <response code="403">Return if token is access denied</response>
         </member>
+        <member name="M:ITJob.API.Controllers.CompanyController.GetCompanyByEmail(System.String)">
+            <summary>
+            [Guest] Endpoint for get company by email
+            </summary>
+            <param name="email">An email of company</param>
+            <returns>The company</returns>
+            <response code="200">Returns the company</response>
+            <response code="204">Returns if the company is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
         <member name="M:ITJob.API.Controllers.CompanyController.CreateCompany(ITJob.Services.ViewModels.Company.CreateCompanyModel)">
             <summary>
-            [Admin] Endpoint for create company
+            [Guest] Endpoint for create company
             </summary>
             <param name="requestBody">An obj contains input info of an company.</param>
             <returns>A company within status 201 or error status.</returns>
@@ -352,7 +372,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.CompanyController.UpdateCompanyAsync(System.Guid,ITJob.Services.ViewModels.Company.UpdateCompanyModel)">
             <summary>
-            [Admin] Endpoint for Admin edit company.
+            [Company] Endpoint for edit company.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of an company.</param>
@@ -362,7 +382,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.CompanyController.UpgradeCompanyAsync(System.Guid,ITJob.Services.ViewModels.Company.UpgradeCompanyModel)">
             <summary>
-            [Admin] Endpoint for update company.
+            [Company] Endpoint for update company.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of an company.</param>
@@ -370,110 +390,136 @@
             <response code="200">Returns company after update</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.CompanyController.DeleteClassAsync(System.Guid)">
+        <member name="M:ITJob.API.Controllers.CompanyController.DeleteClassAsync(System.Guid,ITJob.Services.ViewModels.Company.UpdateReason)">
             <summary>
             [Admin] Endpoint for Admin Delete a company.
             </summary>
             <param name="id">ID of company</param>
+            <param name="updateReason"></param>
             <returns>A company within status 200 or 204 status.</returns>
             <response code="200">Returns 200 status</response>
             <response code="204">Returns NoContent status</response>
         </member>
-        <member name="T:ITJob.API.Controllers.ConfirmMailController">
+        <member name="M:ITJob.API.Controllers.CompanyController.UpdatePasswordApplicantAsync(System.Guid,System.String,System.String)">
+            <summary>
+            [Company] Endpoint for company edit password.
+            </summary>
+            <param name="id"></param>
+            <param name="currentPassword"></param>
+            <param name="newPassword"></param>
+            <returns>A applicant within status 200 or error status.</returns>
+            <response code="200">Returns applicant after update</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.CompanyController.ForgetPasswordUserAsync(System.String,System.Int32,System.String)">
+            <summary>
+            [Company] Endpoint for company reset password.
+            </summary>
+            <param name="otp"></param>
+            <param name="newPassword"></param>
+            <param name="email"></param>
+            <returns>A user within status 200 or error status.</returns>
+            <response code="200">Returns user after update</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="T:ITJob.API.Controllers.ConfigurationController">
             <summary>
             
             </summary>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.#ctor(ITJob.Services.Services.ConfirmMailServices.IConfirmMailService)">
+        <member name="M:ITJob.API.Controllers.ConfigurationController.#ctor(ITJob.Services.Services.ConfigurationServices.IConfigurationService)">
             <summary>
             
             </summary>
-            <param name="confirmMailService"></param>
+            <param name="configurationService"></param>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.ConfirmCreateCompany(System.String)">
+        <member name="M:ITJob.API.Controllers.ConfigurationController.GetConfiguration">
             <summary>
-            [Guest] Endpoint for confirm company
+            [Admin] Endpoint for admin get configuration 
             </summary>
-            <returns>An msg</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+            <returns>A configuration within status 201 or error status.</returns>
+            <response code="201">Returns the configuration</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.RejectCreateCompany(System.String)">
+        <member name="M:ITJob.API.Controllers.ConfigurationController.Configuration(ITJob.Services.ViewModels.Configuration.CongfigurationModel)">
             <summary>
-            [Guest] Endpoint for reject company
+            [Admin] Endpoint for admin configuration 
             </summary>
-            <returns>An msg</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+            <param name="requestBody">An obj contains input info of a configuration.</param>
+            <returns>A configuration within status 201 or error status.</returns>
+            <response code="201">Returns the configuration</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.ConfirmJoinCompany(System.String)">
+        <member name="T:ITJob.API.Controllers.EmployeeController">
             <summary>
-            [Guest] Endpoint for confirm join company
+            
             </summary>
-            <returns>An msg</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.EmployeeController.#ctor(ITJob.Services.Services.EmployeeServices.IEmployeeService)">
+            <summary>
+            
+            </summary>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:ITJob.API.Controllers.EmployeeController.GetAllEmployee(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.EmployeeEnum.EmployeeSort},ITJob.Services.ViewModels.Employee.SearchEmployeeModel)">
+            <summary>
+            [Guest] Endpoint for get all employee with condition
+            </summary>
+            <param name="searchEmployeeModel"></param>
+            <param name="paginationModel">An object contains paging criteria</param>
+            <returns>List of employee</returns>
+            <response code="200">Returns the list of employee</response>
+            <response code="204">Returns if list of employee is empty</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.RejectJoinCompany(System.String)">
+        <member name="M:ITJob.API.Controllers.EmployeeController.GetEmployeeById(System.Guid)">
             <summary>
-            [Guest] Endpoint for reject join company
+            [Guest] Endpoint for get employee by ID
             </summary>
-            <returns>An msg</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+            <param name="id">An id of employee</param>
+            <returns>List of employee</returns>
+            <response code="200">Returns the employee</response>
+            <response code="204">Returns if the employee is not exist</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.SendMailToCompany(System.String)">
+        <member name="M:ITJob.API.Controllers.EmployeeController.CreateEmployee(ITJob.Services.ViewModels.Employee.CreateEmployeeModel)">
             <summary>
-            [Guest] Endpoint for send mail for confirm email
+            [Guest] Endpoint for create employee
             </summary>
-            <param name="email">An email of company</param>
-            <returns>An OTP</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+            <param name="requestBody">An obj contains input info of an employee.</param>
+            <returns>A employee within status 201 or error status.</returns>
+            <response code="201">Returns the employee</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.SendMailToAdminToJoinCompany(System.String)">
+        <member name="M:ITJob.API.Controllers.EmployeeController.UpdateEmployeeAsync(System.Guid,ITJob.Services.ViewModels.Employee.UpdateEmployeeModel)">
             <summary>
-            [Guest] Endpoint for send mail to admin want to join company
+            [Employee] Endpoint for edit employee.
             </summary>
-            <returns>An OTP</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+            <param name="id"></param>
+            <param name="requestBody">An obj contains update info of an employee.</param>
+            <returns>A employee within status 200 or error status.</returns>
+            <response code="200">Returns employee after update</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.SendMailToAdminForApplicantEarn(System.String)">
+        <member name="M:ITJob.API.Controllers.EmployeeController.UpdatePasswordEmployeeAsync(System.Guid,System.String,System.String)">
             <summary>
-            [Guest] Endpoint for send mail to admin fof applicant want to earn
+            [Employee] Endpoint for employee edit password.
             </summary>
-            <returns>An OTP</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
+            <param name="id"></param>
+            <param name="currentPassword"></param>
+            <param name="newPassword"></param>
+            <returns>A employee within status 200 or error status.</returns>
+            <response code="200">Returns employee after update</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.SendMailToAdminForCreateCompany(System.String)">
+        <member name="M:ITJob.API.Controllers.EmployeeController.DeleteClassAsync(System.Guid)">
             <summary>
-            [Guest] Endpoint for send mail confirm account company
+            [Company/Admin] Endpoint for delete a employee.
             </summary>
-            <param name="email">An email of company</param>
-            <returns>A msg</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the email is not exist</response>
-            <response code="403">Return if token is access denied</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.ConfirmMailController.VerifyCode(System.Int32,System.String)">
-            <summary>
-            [Guest] Endpoint for verify code
-            </summary>
-            <param name="code">A code have sent to your mail address </param>
-            <param name="email">An email of user</param>
-            <returns>A msg</returns>
-            <response code="200">Returns the msg</response>
-            <response code="204">Returns if the OTP is not exist</response>
-            <response code="403">Return if token is access denied</response>
+            <param name="id">ID of employee</param>
+            <returns>A employee within status 200 or 204 status.</returns>
+            <response code="200">Returns 200 status</response>
+            <response code="204">Returns NoContent status</response>
         </member>
         <member name="M:ITJob.API.Controllers.FileController.PostList(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
             <summary>
@@ -596,6 +642,18 @@
             <response code="204">Returns if list of job post is empty</response>
             <response code="403">Return if token is access denied</response>
         </member>
+        <member name="M:ITJob.API.Controllers.JobPostController.GetJobPostProfileApplicantLikePage(System.Guid,ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.JobPostEnum.JobPostSort},ITJob.Services.ViewModels.JobPost.SearchJobPostModel)">
+            <summary>
+            [Guest] Endpoint for get all job post like profile applicant with condition
+            </summary>
+            <param name="searchJobPostModel"></param>
+            <param name="paginationModel">An object contains paging criteria</param>
+            <param name="profileApplicantId"></param>
+            <returns>List of job post</returns>
+            <response code="200">Returns the list of job post</response>
+            <response code="204">Returns if list of job post is empty</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
         <member name="M:ITJob.API.Controllers.JobPostController.GetAllJobPostSortBySystem(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.JobPostEnum.JobPostSort},ITJob.Services.ViewModels.JobPost.SearchJobPostModel,System.Guid)">
             <summary>
             [Guest] Endpoint for get all job post with sort by system
@@ -620,7 +678,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.JobPostController.CreateJobPost(ITJob.Services.ViewModels.JobPost.CreateJobPostModel)">
             <summary>
-            [Admin] Endpoint for create job post
+            [Employee] Endpoint for create job post
             </summary>
             <param name="requestBody">An obj contains input info of an job post.</param>
             <returns>A job post within status 201 or error status.</returns>
@@ -629,7 +687,27 @@
         </member>
         <member name="M:ITJob.API.Controllers.JobPostController.UpdateJobPostAsync(System.Guid,ITJob.Services.ViewModels.JobPost.UpdateJobPostModel)">
             <summary>
-            [Admin] Endpoint for Admin edit job post.
+            [Employee] Endpoint for edit job post.
+            </summary>
+            <param name="id"></param>
+            <param name="requestBody">An obj contains update info of an job post.</param>
+            <returns>A job post within status 200 or error status.</returns>
+            <response code="200">Returns job post after update</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.JobPostController.UpdateJobPostExpiredAsync(System.Guid,ITJob.Services.ViewModels.JobPost.UpdateJobPostExpriredModel)">
+            <summary>
+            [Employee] Endpoint for edit job post.
+            </summary>
+            <param name="id"></param>
+            <param name="requestBody">An obj contains update info of an job post.</param>
+            <returns>A job post within status 200 or error status.</returns>
+            <response code="200">Returns job post after update</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.JobPostController.UpdateJobPostMoneyAsync(System.Guid,ITJob.Services.ViewModels.JobPost.UpdateJobPostMoneyModel)">
+            <summary>
+            [Employee] Endpoint for employee edit job post.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of an job post.</param>
@@ -639,7 +717,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.JobPostController.ApprovalJobPostAsync(System.Guid,ITJob.Services.ViewModels.JobPost.ApprovalJobPostModel)">
             <summary>
-            [Admin] Endpoint for Admin approval job post.
+            [Company] Endpoint for company approval job post.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains approval a job post.</param>
@@ -647,7 +725,7 @@
             <response code="200">Returns job post after update</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.JobPostController.DeleteClassAsync(System.Guid)">
+        <member name="M:ITJob.API.Controllers.JobPostController.DeleteJobPostAsync(System.Guid)">
             <summary>
             [Admin] Endpoint for Admin Delete a job post.
             </summary>
@@ -705,7 +783,40 @@
             <response code="200">Returns 200 status</response>
             <response code="204">Returns NoContent status</response>
         </member>
+        <member name="T:ITJob.API.Controllers.LikeController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ITJob.API.Controllers.LikeController.#ctor(ITJob.Services.Services.LikeServices.ILikeService)">
+            <summary>
+            
+            </summary>
+            <param name="likeService"></param>
+        </member>
         <member name="M:ITJob.API.Controllers.LikeController.GetAllLike(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.LikeEnum.LikeSort},ITJob.Services.ViewModels.Like.SearchLikeModel)">
+            <summary>
+            [Guest] Endpoint for get all like with condition
+            </summary>
+            <param name="searchLikeModel"></param>
+            <param name="paginationModel">An object contains paging criteria</param>
+            <returns>List of like</returns>
+            <response code="200">Returns the list of like</response>
+            <response code="204">Returns if list of like is empty</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.LikeController.GetAllDateLike(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.LikeEnum.LikeSort},ITJob.Services.ViewModels.Like.SearchLikeModel)">
+            <summary>
+            [Guest] Endpoint for get all like with condition
+            </summary>
+            <param name="searchLikeModel"></param>
+            <param name="paginationModel">An object contains paging criteria</param>
+            <returns>List of like</returns>
+            <response code="200">Returns the list of like</response>
+            <response code="204">Returns if list of like is empty</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.LikeController.GetAllCompanyDateLike(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.LikeEnum.LikeSort},ITJob.Services.ViewModels.Like.SearchLikeModel)">
             <summary>
             [Guest] Endpoint for get all like with condition
             </summary>
@@ -771,6 +882,99 @@
             <returns>A like within status 200 or 204 status.</returns>
             <response code="200">Returns 200 status</response>
             <response code="204">Returns NoContent status</response>
+        </member>
+        <member name="T:ITJob.API.Controllers.MailServiceController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.#ctor(ITJob.Services.Services.ConfirmMailServices.IMailService)">
+            <summary>
+            
+            </summary>
+            <param name="mailService"></param>
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.ConfirmCreateCompany(System.String)">
+            <summary>
+            [Guest] Endpoint for confirm create company
+            </summary>
+            <returns>An msg</returns>
+            <response code="200">Returns the msg</response>
+            <response code="204">Returns if the email is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.RejectCreateCompany(System.String)">
+            <summary>
+            [Guest] Endpoint for reject create company
+            </summary>
+            <returns>An msg</returns>
+            <response code="200">Returns the msg</response>
+            <response code="204">Returns if the email is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.SendMailToAdminForApplicantEarn(System.String)">
+            <summary>
+            [Guest] Endpoint for send mail to admin fof applicant want to earn
+            </summary>
+            <returns>An OTP</returns>
+            <response code="200">Returns the msg</response>
+            <response code="204">Returns if the email is not exist</response>
+            <response code="403">Return if token is access denied</response>
+            
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.SendMailToAdminForCreateCompany(System.String)">
+            <summary>
+            [Guest] Endpoint for send mail to admin for create account company
+            </summary>
+            <param name="email">An email of company</param>
+            <returns>A msg</returns>
+            <response code="200">Returns the msg</response>
+            <response code="204">Returns if the email is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.SendMailToCompanyForConfirmCompany(System.String)">
+            <summary>
+            [Guest] Endpoint for send mail confirm account company
+            </summary>
+            <param name="email">An email of company</param>
+            <returns>A msg</returns>
+            <response code="200">Returns the msg</response>
+            <response code="204">Returns if the email is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.MailServiceController.VerifyCode(System.Int32,System.String)">
+            <summary>
+            [Guest] Endpoint for verify code
+            </summary>
+            <param name="code">A code have sent to your mail address </param>
+            <param name="email">An email of user</param>
+            <returns>A msg</returns>
+            <response code="200">Returns the msg</response>
+            <response code="204">Returns if the OTP is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="T:ITJob.API.Controllers.NotiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ITJob.API.Controllers.NotiController.SubscribeTopic(System.Collections.Generic.IReadOnlyList{System.String},System.String)">
+            <summary>
+            [Guest] Endpoint for company subscribe topic with condition
+            </summary>
+            <returns>Msg</returns>
+            <response code="200">Returns msg</response>
+            <response code="204">Returns msg is empty</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.NotiController.UnSubscribeTopic(System.Collections.Generic.IReadOnlyList{System.String},System.String)">
+            <summary>
+            [Guest] Endpoint for company unsubscribe topic with condition
+            </summary>
+            <returns>Msg</returns>
+            <response code="200">Returns msg</response>
+            <response code="204">Returns msg is empty</response>
+            <response code="403">Return if token is access denied</response>
         </member>
         <member name="T:ITJob.API.Controllers.ProductController">
             <summary>
@@ -903,7 +1107,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ProfileApplicantController.CreateProfileApplicant(ITJob.Services.ViewModels.ProfileApplicant.CreateProfileApplicantModel)">
             <summary>
-            [Admin] Endpoint for create profile applicant
+            [Applicant] Endpoint for create profile applicant
             </summary>
             <param name="requestBody">An obj contains input info of an profile applicant.</param>
             <returns>A profile applicant within status 201 or error status.</returns>
@@ -912,7 +1116,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ProfileApplicantController.UpdateProfileApplicantAsync(System.Guid,ITJob.Services.ViewModels.ProfileApplicant.UpdateProfileApplicantModel)">
             <summary>
-            [Admin] Endpoint for Admin edit profile applicant.
+            [Applicant] Endpoint for edit profile applicant.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of an profile applicant.</param>
@@ -922,7 +1126,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ProfileApplicantController.DeleteClassAsync(System.Guid)">
             <summary>
-            [Admin] Endpoint for Admin Delete a profile applicant.
+            [Applicant] Endpoint for delete a profile applicant.
             </summary>
             <param name="id">ID of profile applicant</param>
             <returns>A profile applicant within status 200 or 204 status.</returns>
@@ -1001,7 +1205,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ProjectController.CreateProject(ITJob.Services.ViewModels.Project.CreateProjectModel)">
             <summary>
-            [Admin] Endpoint for create project
+            [Applicant] Endpoint for create project
             </summary>
             <param name="requestBody">An obj contains input info of an project.</param>
             <returns>A project within status 201 or error status.</returns>
@@ -1010,7 +1214,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ProjectController.UpdateProjectAsync(System.Guid,ITJob.Services.ViewModels.Project.UpdateProjectModel)">
             <summary>
-            [Admin] Endpoint for Admin edit project.
+            [Applicant] Endpoint for Admin edit project.
             </summary>
             <param name="id"></param>
             <param name="requestBody">An obj contains update info of an project.</param>
@@ -1020,7 +1224,7 @@
         </member>
         <member name="M:ITJob.API.Controllers.ProjectController.DeleteClassAsync(System.Guid)">
             <summary>
-            [Admin] Endpoint for Admin Delete a project.
+            [Applicant] Endpoint for Admin Delete a project.
             </summary>
             <param name="id">ID of project</param>
             <returns>A project within status 200 or 204 status.</returns>
@@ -1232,7 +1436,7 @@
             <response code="204">Returns if the OTP is not exist</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.SmsController.VerifyOtp(System.String,System.String)">
+        <member name="M:ITJob.API.Controllers.SmsController.VerifyOtp(System.Int32,System.String)">
             <summary>
             [Guest] Endpoint for verify OTP by phone
             </summary>
@@ -1275,119 +1479,73 @@
             <response code="204">Returns if the transaction is not exist</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.UserController.GetAllUser(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.UserEnum.UserSort},ITJob.Services.ViewModels.User.SearchUserModel)">
+        <member name="M:ITJob.API.Controllers.TransactionController.GetSystemWalletDetail">
             <summary>
-            [Guest] Endpoint for get all user with condition
+            [Guest] Endpoint for get total of system wallet
             </summary>
-            <param name="searchUserModel"></param>
+            <returns>List of transaction</returns>
+            <response code="200">Returns the transaction</response>
+            <response code="204">Returns if the transaction is not exist</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.TransactionController.CreateTransaction(ITJob.Services.ViewModels.Transaction.CreateTransactionModel)">
+            <summary>
+            [Admin] Endpoint for create transaction
+            </summary>
+            <param name="requestBody">An obj contains input info of a transaction.</param>
+            <returns>A transaction within status 201 or error status.</returns>
+            <response code="201">Returns the transaction</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="T:ITJob.API.Controllers.TransactionJobPostController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ITJob.API.Controllers.TransactionJobPostController.GetAllTransactionJobPost(ITJob.Services.Utility.Paging.PagingParam{ITJob.Services.Enum.TransactionJobPostEnum.TransactionJobPostSort},ITJob.Services.ViewModels.TransactionJobPost.SearchTransactionJobPostModel)">
+            <summary>
+            [Guest] Endpoint for get all transaction job post with condition
+            </summary>
             <param name="paginationModel">An object contains paging criteria</param>
-            <returns>List of user</returns>
-            <response code="200">Returns the list of user</response>
-            <response code="204">Returns if list of user is empty</response>
+            <param name="searchTransactionJobPostModel"></param>
+            <returns>List of transaction</returns>
+            <response code="200">Returns the list of transaction job post</response>
+            <response code="204">Returns if list of transaction job post is empty</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.UserController.GetUserById(System.Guid)">
+        <member name="M:ITJob.API.Controllers.TransactionJobPostController.GetTransactionJobPostById(System.Guid)">
             <summary>
-            [Guest] Endpoint for get user by ID
+            [Guest] Endpoint for get transaction job post by ID
             </summary>
-            <param name="id">An id of user</param>
-            <returns>List of user</returns>
-            <response code="200">Returns the user</response>
-            <response code="204">Returns if the user is not exist</response>
+            <param name="id">An id of transaction</param>
+            <returns>List of transaction</returns>
+            <response code="200">Returns the transaction job post</response>
+            <response code="204">Returns if the transaction job post is not exist</response>
             <response code="403">Return if token is access denied</response>
         </member>
-        <member name="M:ITJob.API.Controllers.UserController.GetUserByEmail(System.String)">
+        <member name="M:ITJob.API.Controllers.TransactionJobPostController.CreateTransactionJobPost(ITJob.Services.ViewModels.TransactionJobPost.CreateTransactionJobPostModel)">
             <summary>
-            [Guest] Endpoint for get user by email
+            [Admin] Endpoint for create transaction job post
             </summary>
-            <param name="email">An email of user</param>
-            <returns>An user</returns>
-            <response code="200">Returns the user</response>
-            <response code="204">Returns if the user is not exist</response>
+            <param name="requestBody">An obj contains input info of a transaction job post.</param>
+            <returns>A transaction job post within status 201 or error status.</returns>
+            <response code="201">Returns the transaction job post</response>
             <response code="403">Return if token is access denied</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.CreateUser(ITJob.Services.ViewModels.User.CreateUserModel)">
-            <summary>
-            [Admin] Endpoint for create user
-            </summary>
-            <param name="requestBody">An obj contains input info of an user.</param>
-            <returns>A user within status 201 or error status.</returns>
-            <response code="201">Returns the user</response>
-            <response code="403">Return if token is access denied</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.UpdateUserAsync(System.Guid,ITJob.Services.ViewModels.User.UpdateUserModel)">
-            <summary>
-            [Admin] Endpoint for Admin edit user.
-            </summary>
-            <param name="id"></param>
-            <param name="requestBody">An obj contains update info of an user.</param>
-            <returns>A user within status 200 or error status.</returns>
-            <response code="200">Returns user after update</response>
-            <response code="403">Return if token is access denied</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.UpdatePasswordApplicantAsync(System.Guid,System.String,System.String)">
-            <summary>
-            [User] Endpoint for user edit password.
-            </summary>
-            <param name="id"></param>
-            <param name="currentPassword"></param>
-            <param name="newPassword"></param>
-            <returns>A applicant within status 200 or error status.</returns>
-            <response code="200">Returns applicant after update</response>
-            <response code="403">Return if token is access denied</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.ForgetPasswordUserAsync(System.String,System.Int32,System.String)">
-            <summary>
-            [User] Endpoint for user reset password.
-            </summary>
-            <param name="otp"></param>
-            <param name="newPassword"></param>
-            <param name="email"></param>
-            <returns>A user within status 200 or error status.</returns>
-            <response code="200">Returns user after update</response>
-            <response code="403">Return if token is access denied</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.DeleteClassAsync(System.Guid)">
-            <summary>
-            [Admin] Endpoint for Admin Delete a user.
-            </summary>
-            <param name="id">ID of user</param>
-            <returns>A user within status 200 or 204 status.</returns>
-            <response code="200">Returns 200 status</response>
-            <response code="204">Returns NoContent status</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.Login(ITJob.Services.ViewModels.User.LoginModel)">
-            <summary>
-            [Guest] Endpoint for Guest login.
-            </summary>
-            <param name="requestBody">An obj contains phone and password user.</param>
-            <returns>A user within status 200 or 204 status.</returns>
-            <response code="200">Returns 200 status</response>
-            <response code="204">Returns NoContent status</response>
         </member>
         <member name="M:ITJob.API.Controllers.UserController.LoginApplicant(ITJob.Services.ViewModels.User.LoginApplicantModel)">
             <summary>
-            [Guest] Endpoint for Guest login.
+            [Guest] Endpoint for applicant login.
             </summary>
             <param name="loginApplicantModel">An obj contains phone and password user.</param>
             <returns>A user within status 200 or 204 status.</returns>
             <response code="200">Returns 200 status</response>
             <response code="204">Returns NoContent status</response>
         </member>
-        <member name="M:ITJob.API.Controllers.UserController.LoginCompany(ITJob.Services.ViewModels.User.LoginCompanyModel)">
+        <member name="M:ITJob.API.Controllers.UserController.Login(ITJob.Services.ViewModels.User.LoginEmailModel)">
             <summary>
             [Guest] Endpoint for Guest login.
             </summary>
-            <param name="loginApplicantModel">An obj contains phone and password user.</param>
-            <returns>A user within status 200 or 204 status.</returns>
-            <response code="200">Returns 200 status</response>
-            <response code="204">Returns NoContent status</response>
-        </member>
-        <member name="M:ITJob.API.Controllers.UserController.LoginAdmin(ITJob.Services.ViewModels.User.LoginApplicantModel)">
-            <summary>
-            [Admin] Endpoint for admin login.
-            </summary>
-            <param name="loginApplicantModel">An obj contains phone and password user.</param>
+            <param name="loginEmailModel">An obj contains phone and password user.</param>
             <returns>A user within status 200 or 204 status.</returns>
             <response code="200">Returns 200 status</response>
             <response code="204">Returns NoContent status</response>
@@ -1397,19 +1555,32 @@
             
             </summary>
         </member>
-        <member name="M:ITJob.API.Controllers.VNPayController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,ITJob.Entity.Repositories.WalletRepositories.IWalletRepository)">
+        <member name="M:ITJob.API.Controllers.VNPayController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,ITJob.Entity.Repositories.WalletRepositories.IWalletRepository,ITJob.Entity.Repositories.TransactionRepositories.ITransactionRepository)">
             <summary>
             
             </summary>
             <param name="configuration"></param>
             <param name="walletRepository"></param>
+            <param name="transactionRepository"></param>
         </member>
-        <member name="M:ITJob.API.Controllers.VNPayController.Get(ITJob.Services.VNPay.BusinessPayment)">
+        <member name="M:ITJob.API.Controllers.VNPayController.Get(ITJob.Services.Services.VNPay.BusinessPayment)">
             <summary>
-            
+            [Guest] Endpoint for company create url payment with condition
             </summary>
-            <param name="businessPayment"></param>
-            <returns></returns>
+            <param name="businessPayment">An object payment</param>
+            <returns>List of user</returns>
+            <response code="200">Returns the list of user</response>
+            <response code="204">Returns if list of user is empty</response>
+            <response code="403">Return if token is access denied</response>
+        </member>
+        <member name="M:ITJob.API.Controllers.VNPayController.Confirm">
+            <summary>
+            [Guest] Endpoint for company confirm payment with condition
+            </summary>
+            <returns>List of user</returns>
+            <response code="200">Returns the list of user</response>
+            <response code="204">Returns if list of user is empty</response>
+            <response code="403">Return if token is access denied</response>
         </member>
         <member name="T:ITJob.API.Controllers.WalletController">
             <summary>
@@ -1583,6 +1754,40 @@
             <param name="jobPostService">Injection of <see cref="T:ITJob.Services.Services.JobPostServices.IJobPostService"/></param>
         </member>
         <member name="M:ITJob.API.Cron.OutOfDateCron.Execute(Quartz.IJobExecutionContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:ITJob.API.Cron.OutOfMoneyCron">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ITJob.API.Cron.OutOfMoneyCron.#ctor(ITJob.Services.Services.JobPostServices.IJobPostService)">
+            <summary>
+            Initialized of instance <see cref="T:ITJob.API.Cron.OutOfMoneyCron"/>
+            </summary>
+            <param name="jobPostService">Injection of <see cref="T:ITJob.Services.Services.JobPostServices.IJobPostService"/></param>
+        </member>
+        <member name="M:ITJob.API.Cron.OutOfMoneyCron.Execute(Quartz.IJobExecutionContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:ITJob.API.Cron.ResetCountCron">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ITJob.API.Cron.ResetCountCron.#ctor(ITJob.Services.Services.ProfileApplicantServices.IProfileApplicantService)">
+            <summary>
+            
+            </summary>
+            <param name="profileApplicantService"></param>
+        </member>
+        <member name="M:ITJob.API.Cron.ResetCountCron.Execute(Quartz.IJobExecutionContext)">
             <summary>
             
             </summary>

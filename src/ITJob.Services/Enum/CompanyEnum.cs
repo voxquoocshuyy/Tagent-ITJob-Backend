@@ -18,18 +18,11 @@ public static class CompanyEnum
         /// Status for pending
         /// </summary>
         Pending = 2,
-    }
-    public enum CompanyPremium
-    {
+        
         /// <summary>
-        /// Status for not premium
+        /// Status for verifying
         /// </summary>
-        NotPremium = 0,
-            
-        /// <summary>
-        /// Status for premium
-        /// </summary>
-        Premium = 1,
+        Verifying = 3,
     }
     public enum CompanySort
     {

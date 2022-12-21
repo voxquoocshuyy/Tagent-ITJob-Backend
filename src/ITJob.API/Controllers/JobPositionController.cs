@@ -87,7 +87,7 @@ public class JobPositionController : ControllerBase
     /// <response code="201">Returns the job position</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN")]
     [ProducesResponseType(typeof(BaseResponse<GetJobPositionDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateJobPosition([FromBody] CreateJobPositionModel requestBody)
     {
@@ -110,7 +110,7 @@ public class JobPositionController : ControllerBase
     /// <response code="200">Returns job position after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN")]
     [ProducesResponseType(typeof(BaseResponse<GetJobPositionDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateJobPositionAsync(Guid id, [FromBody] UpdateJobPositionModel requestBody)
     {
@@ -140,7 +140,7 @@ public class JobPositionController : ControllerBase
     /// <response code="200">Returns 200 status</response>
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

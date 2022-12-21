@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PpG+PKs0uasHY4VRSFdrAYvhLX6JB6Utu5W3aClogAiPZm1XpTQqzyqunMGJgMIxce8xdsCuMfsmPNmuxQeDMA==",
+  "dgSpecHash": "kJksSQcPz8yRzZvs+0tQ0baF4KEBYx8FOZNPGM5MsrtfCv9rpv6aUaTtg5XaTzxD/HOwWejM0gl94joP47tovw==",
   "success": true,
   "projectFilePath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Services/ITJob.Services.csproj",
   "expectedPackageFiles": [
@@ -217,7 +217,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'SendGrid.CSharp.HTTP.Client 3.4.12' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'SendGrid.CSharp.HTTP.Client 3.4.12' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "SendGrid.CSharp.HTTP.Client",
       "targetGraphs": [
         "net6.0"

@@ -9,9 +9,10 @@ namespace ITJob.Entity.Entities
         public Guid? JobPostId { get; set; }
         public Guid? ProfileApplicantId { get; set; }
         public DateTime? CreateDate { get; set; }
-        public int? IsApplicantLike { get; set; }
-        public int? IsJobPostLike { get; set; }
-        public int? Match { get; set; }
+        public bool? IsProfileApplicantLike { get; set; }
+        public bool? IsJobPostLike { get; set; }
+        public bool? Match { get; set; }
+        public DateTime? MatchDate { get; set; }
 
         public virtual JobPost? JobPost { get; set; }
         public virtual ProfileApplicant? ProfileApplicant { get; set; }

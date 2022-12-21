@@ -3,6 +3,7 @@ using ITJob.Services.Services.ApplicantServices;
 using ITJob.Services.Utility.Paging;
 using ITJob.Services.ViewModels;
 using ITJob.Services.ViewModels.Applicant;
+using ITJob.Services.ViewModels.Company;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -108,14 +109,14 @@ public class ApplicantController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for create applicant
+    /// [Applicant] Endpoint for create applicant
     /// </summary>
     /// <param name="requestBody">An obj contains input info of a applicant.</param>
     /// <returns>A applicant within status 201 or error status.</returns>
     /// <response code="201">Returns the applicant</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(BaseResponse<GetApplicantDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateApplicant([FromForm] CreateApplicantModel requestBody)
     {
@@ -130,7 +131,7 @@ public class ApplicantController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit applicant.
+    /// [Applicant] Endpoint for edit applicant.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains update info of a applicant.</param>
@@ -138,7 +139,7 @@ public class ApplicantController : ControllerBase
     /// <response code="200">Returns applicant after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetApplicantDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateApplicantAsync(Guid id, [FromForm] UpdateApplicantModel requestBody)
     {
@@ -161,7 +162,7 @@ public class ApplicantController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit applicant for earn money.
+    /// [Applicant] Endpoint for edit applicant for earn money.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody"></param>
@@ -169,7 +170,7 @@ public class ApplicantController : ControllerBase
     /// <response code="200">Returns applicant after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("update")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN,APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetApplicantDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateApplicantToEarn(Guid id, UpdateEarnMoneyApplicantModel requestBody)
     {
@@ -186,7 +187,7 @@ public class ApplicantController : ControllerBase
     }
     
     /// <summary>
-    /// [User] Endpoint for applicant edit password.
+    /// [Applicant] Endpoint for applicant edit password.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="currentPassword"></param>
@@ -195,7 +196,7 @@ public class ApplicantController : ControllerBase
     /// <response code="200">Returns applicant after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("password")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetApplicantDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdatePasswordApplicantAsync(Guid id, string currentPassword, string newPassword)
     {
@@ -211,7 +212,7 @@ public class ApplicantController : ControllerBase
     }
 
     /// <summary>
-    /// [User] Endpoint for applicant reset password.
+    /// [Applicant] Endpoint for applicant reset password.
     /// </summary>
     /// <param name="otp"></param>
     /// <param name="newPassword"></param>
@@ -220,9 +221,9 @@ public class ApplicantController : ControllerBase
     /// <response code="200">Returns applicant after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("reset")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    // [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetApplicantDetail>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ForgetPasswordApplicantAsync(string phone, string otp, string newPassword)
+    public async Task<IActionResult> ForgetPasswordApplicantAsync(string phone, int otp, string newPassword)
     {
         try
         {
@@ -234,21 +235,22 @@ public class ApplicantController : ControllerBase
             return BadRequest(e);
         }
     }
-    
+
     /// <summary>
     /// [Admin] Endpoint for Admin Delete an applicant.
     /// </summary>
     /// <param name="id">ID of applicant</param>
+    /// <param name="updateReason"></param>
     /// <returns>An applicant within status 200 or 204 status.</returns>
     /// <response code="200">Returns 200 status</response>
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
-    public async Task<IActionResult> DeleteClassAsync(Guid id)
+    [Authorize(Roles ="ADMIN")]
+    public async Task<IActionResult> DeleteClassAsync(Guid id, UpdateReason updateReason)
     {
         try
         {
-            await _applicantService.DeleteApplicantAsync(id);
+            await _applicantService.DeleteApplicantAsync(id, updateReason);
         }
         catch (Exception e)
         {

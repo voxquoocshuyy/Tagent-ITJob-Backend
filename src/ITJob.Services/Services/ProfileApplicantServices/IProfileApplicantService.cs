@@ -20,6 +20,6 @@ public interface IProfileApplicantService
     public Task<GetProfileApplicantDetail> UpdateProfileApplicantAsync(Guid id, UpdateProfileApplicantModel requestBody);
 
     public Task DeleteProfileApplicantAsync(Guid id);
-
+    public Task ResetCount();
     public Task<int> GetTotal();   
 }

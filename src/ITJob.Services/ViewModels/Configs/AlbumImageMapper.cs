@@ -9,6 +9,7 @@ public static class AlbumImageMapper
     {
         configuration.CreateMap<ITJob.Entity.Entities.AlbumImage, GetAlbumImageDetail>().ReverseMap();
         configuration.CreateMap<ITJob.Entity.Entities.AlbumImage, CreateAlbumImageModel>().ReverseMap();
+        configuration.CreateMap<ITJob.Entity.Entities.AlbumImage, CreateAlbumImageUrlModel>().ReverseMap();
         configuration.CreateMap<ITJob.Entity.Entities.AlbumImage, UpdateAlbumImageModel>().ReverseMap();
     }
 }

@@ -22,6 +22,7 @@ public interface ICompanyService
     /// <param name="id">Id of Company.</param>
     /// <returns>A Company Detail.</returns>>
     public Task<GetCompanyDetail> GetCompanyById(Guid id);
+    public Task<GetCompanyDetail> GetCompanyByEmail(string email);
 
     /// <summary>
     /// Create Company.
@@ -44,12 +45,17 @@ public interface ICompanyService
     /// <param name="requestBody">Model Upgrade Company request of Company.</param>
     /// <returns>A Company Detail.</returns>>
     public Task<GetCompanyDetail> UpgradeCompanyAsync(Guid id, UpgradeCompanyModel requestBody);
+
+    public Task<string> UpdatePasswordCompanyAsync(Guid id, string currentPassword, string newPassword);
+    public Task<string> ForgetPasswordCompanyAsync(string email, int otp, string newPassword);
+
     /// <summary>
     /// Delete Company - Change Status to Inactive
     /// </summary>
     /// <param name="id">ID of Company</param>
+    /// <param name="updateReason"></param>
     /// <returns></returns>
-    public Task DeleteCompanyAsync(Guid id);
+    public Task DeleteCompanyAsync(Guid id, UpdateReason updateReason);
     
     /// <summary>
     /// Get total of Company

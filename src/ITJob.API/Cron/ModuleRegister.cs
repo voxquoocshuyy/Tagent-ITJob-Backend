@@ -22,9 +22,13 @@ public static class ModuleRegister
             });
             var startJobPost = new JobKey("StatJobPostCron", "JobPostGroup");
             var outOfDateJobPost = new JobKey("OutOfDateJobCron", "JobPostGroup");
+            var resetCount = new JobKey("ResetCountCron", "JobPostGroup");
+            // var outOfMoney = new JobKey("OutOfMoneyCron", "JobPostGroup");
             
             q.AddJob<StartJobCron>(o => o.WithIdentity(startJobPost));
             q.AddJob<OutOfDateCron>(o => o.WithIdentity(outOfDateJobPost));
+            q.AddJob<ResetCountCron>(o=> o.WithIdentity(resetCount));
+            // q.AddJob<OutOfMoneyCron>(o => o.WithIdentity(outOfMoney));
             
             q.AddTrigger(opts => opts.ForJob(startJobPost)
                 .WithIdentity("StartJobPostTrigger")
@@ -35,11 +39,21 @@ public static class ModuleRegister
                 .WithIdentity("OutOfDateJobPostTrigger")
                 .WithCronSchedule("0 0 0 ? * *"));
             
+            q.AddTrigger(opts => opts.ForJob(resetCount)
+                .WithIdentity("ResetCountTrigger")
+                .WithCronSchedule("0 0 0 ? * *"));
+            
+            // q.AddTrigger(opts => opts.ForJob(outOfMoney)
+            //     .WithIdentity("OutOfMoneyTrigger")
+            //     .WithCronSchedule("1 * * ? * *"));
+            
             q.InterruptJobsOnShutdown = true;
         });
 
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
         services.AddTransient<IJob, StartJobCron>();
         services.AddTransient<IJob, OutOfDateCron>();
+        services.AddTransient<IJob, ResetCountCron>();
+        // services.AddTransient<IJob, OutOfMoneyCron>();
     }
 }

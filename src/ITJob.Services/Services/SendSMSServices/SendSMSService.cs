@@ -1,5 +1,6 @@
 using ITJob.Entity.Entities;
 using ITJob.Entity.Repositories.ApplicantRepositories;
+using ITJob.Entity.Repositories.UserRepositories;
 using ITJob.Services.Enum;
 using ITJob.Services.Services.ApplicantServices;
 using ITJob.Services.Utility.ErrorHandling.Object;
@@ -18,11 +19,13 @@ public class SendSMSService : ISendSMSService
     private readonly IConfiguration _config;
     private readonly IApplicantService _applicantService;
     private readonly IApplicantRepository _applicantRepository;
-    public SendSMSService(IConfiguration config, IApplicantService applicantService, IApplicantRepository applicantRepository)
+    private readonly IUserRepository _userRepository;
+    public SendSMSService(IConfiguration config, IApplicantService applicantService, IApplicantRepository applicantRepository, IUserRepository userRepository)
     {
         _config = config;
         _applicantService = applicantService;
         _applicantRepository = applicantRepository;
+        _userRepository = userRepository;
     }
     int min = 1111;
     int max = 9999;
@@ -44,20 +47,25 @@ public class SendSMSService : ISendSMSService
             from: from,
             body: otp);
         Applicant tempApplicant = await _applicantRepository.GetFirstOrDefaultAsync(a => a.Phone == phone);
-        tempApplicant.Otp = otp;
+        tempApplicant.Otp = Int32.Parse(otp);
         _applicantRepository.Update(tempApplicant);
         await _applicantRepository.SaveChangesAsync();
         return otp;
     }
-
-    public async Task<string> Verify(string code, string phone)
+    
+    public async Task<string> Verify(int code, string phone)
     {
-        Applicant tempApplicant = await _applicantRepository.GetFirstOrDefaultAsync(a => a.Phone == phone);
-        if (tempApplicant.Otp == code)
+        var applicant = await _applicantRepository.GetFirstOrDefaultAsync(a => a.Phone == phone);
+        var user = await _userRepository.GetFirstOrDefaultAsync(u => u.ApplicantId == applicant.Id);
+        if (applicant.Otp == code)
         {
-            tempApplicant.Status = (int?)ApplicantEnum.ApplicantStatus.Active;
-            _applicantRepository.Update(tempApplicant);
+            applicant.Status = (int?)ApplicantEnum.ApplicantStatus.Active;
+            _applicantRepository.Update(applicant);
             await _applicantRepository.SaveChangesAsync();
+            
+            user.Status = (int?)UserEnum.UserStatus.Active;
+            _userRepository.Update(user);
+            await _userRepository.SaveChangesAsync();
         }
         else
         {

@@ -26,6 +26,8 @@ namespace ITJob.Entity.Entities
         public Guid? JobPositionId { get; set; }
         public Guid? WorkingStyleId { get; set; }
         public int? Status { get; set; }
+        public int? CountLike { get; set; }
+        public int? CountShare { get; set; }
 
         public virtual Applicant? Applicant { get; set; }
         public virtual JobPosition? JobPosition { get; set; }

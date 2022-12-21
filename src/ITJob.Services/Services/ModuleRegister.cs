@@ -3,12 +3,15 @@ using ITJob.Services.Services.ApplicantServices;
 using ITJob.Services.Services.BlockServices;
 using ITJob.Services.Services.CertificateServices;
 using ITJob.Services.Services.CompanyServices;
+using ITJob.Services.Services.ConfigurationServices;
 using ITJob.Services.Services.ConfirmMailServices;
+using ITJob.Services.Services.EmployeeServices;
 using ITJob.Services.Services.FileServices;
 using ITJob.Services.Services.JobPositionServices;
 using ITJob.Services.Services.JobPostServices;
 using ITJob.Services.Services.JobPostSkillServices;
 using ITJob.Services.Services.LikeServices;
+using ITJob.Services.Services.MailServices;
 using ITJob.Services.Services.MatchServices;
 using ITJob.Services.Services.ProductServices;
 using ITJob.Services.Services.ProfileApplicantServices;
@@ -56,11 +59,13 @@ public static class ModuleRegister
         services.AddScoped<IBlockService, BlockService>();
         services.AddScoped<IJobPostSkillService, JobPostSkillService>();
         services.AddScoped<ISendSMSService, SendSMSService>();
-        services.AddScoped<IConfirmMailService, ConfirmMailService>();
+        services.AddScoped<IMailService, MailService>();
         services.AddScoped<IMatchService, MatchService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<ITransactionJobPostService, TransactionJobPostService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IConfigurationService, ConfigurationService>();
     }
 }

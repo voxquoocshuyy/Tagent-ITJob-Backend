@@ -11,6 +11,8 @@ public static class JobPostMapper
         configuration.CreateMap<ITJob.Entity.Entities.JobPost, CreateJobPostModel>().ReverseMap();
         configuration.CreateMap<ITJob.Entity.Entities.JobPost, UpdateJobPostModel>().ReverseMap();
         configuration.CreateMap<ITJob.Entity.Entities.JobPost, JobPostDetailScore>().ReverseMap();
+        configuration.CreateMap<ITJob.Entity.Entities.JobPost, UpdateJobPostExpriredModel>().ReverseMap();
+        configuration.CreateMap<ITJob.Entity.Entities.JobPost, UpdateJobPostMoneyModel>().ReverseMap();
         configuration.CreateMap<GetJobPostDetail, JobPostDetailScore>().ReverseMap();
     }
 }

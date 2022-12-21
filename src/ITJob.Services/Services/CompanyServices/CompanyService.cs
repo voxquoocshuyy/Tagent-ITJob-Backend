@@ -1,6 +1,9 @@
 using AutoMapper;
 using ITJob.Entity.Entities;
 using ITJob.Entity.Repositories.CompanyRepositories;
+using ITJob.Entity.Repositories.EmployeeRepositories;
+using ITJob.Entity.Repositories.JobPostRepositories;
+using ITJob.Entity.Repositories.RoleRepositories;
 using ITJob.Entity.Repositories.SystemWalletRepositories;
 using ITJob.Entity.Repositories.TransactionRepositories;
 using ITJob.Entity.Repositories.UserRepositories;
@@ -14,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using User = ITJob.Entity.Entities.User;
 using ITJob.Services.Services.FileServices;
+using ITJob.Services.Services.Notification;
 using Microsoft.Extensions.Configuration;
 
 namespace ITJob.Services.Services.CompanyServices;
@@ -28,9 +32,13 @@ public class CompanyService : ICompanyService
     private readonly IWalletRepository _walletRepository;
     private readonly ITransactionRepository _transactionRepository;
     private readonly ISystemWalletRepository _systemWalletRepository;
+    private readonly IJobPostRepository _jobPostRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IEmployeeRepository _employeeRepository;
     public CompanyService(ICompanyRepository companyRepository, IMapper mapper, IUserRepository userRepository, IFileService fileService,
         IWalletRepository walletRepository,  IConfiguration config, ITransactionRepository transactionRepository,
-        ISystemWalletRepository systemWalletRepository)
+        ISystemWalletRepository systemWalletRepository, IJobPostRepository jobPostRepository, IRoleRepository roleRepository,
+        IEmployeeRepository employeeRepository)
     {
         _companyRepository = companyRepository;
         _mapper = mapper;
@@ -40,6 +48,9 @@ public class CompanyService : ICompanyService
         _upgrade = double.Parse(config["SystemConfiguration:Upgrade"]);
         _transactionRepository = transactionRepository;
         _systemWalletRepository = systemWalletRepository;
+        _jobPostRepository = jobPostRepository;
+        _roleRepository = roleRepository;
+        _employeeRepository = employeeRepository;
     }
     public IList<GetCompanyDetail> GetCompanyPage(PagingParam<CompanyEnum.CompanySort> paginationModel, SearchCompanyModel searchCompanyModel)
     {
@@ -64,6 +75,17 @@ public class CompanyService : ICompanyService
         return result;
     }
 
+    public async Task<GetCompanyDetail> GetCompanyByEmail(string email)
+    {
+        Company company = await _companyRepository.GetFirstOrDefaultAsync(e => e.Email == email);
+        if (company == null)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Email not exist!!! ");
+        }
+        var result = _mapper.Map<GetCompanyDetail>(company);
+        return result;
+    }
+    
     public async Task<GetCompanyDetail> CreateCompanyAsync(CreateCompanyModel requestBody)
     {
         Company company = _mapper.Map<Company>(requestBody);
@@ -76,16 +98,43 @@ public class CompanyService : ICompanyService
         {
             throw new CException(StatusCodes.Status400BadRequest, "Email has exist!!! ");
         }
+        var userInDb = await _userRepository.GetFirstOrDefaultAsync(e => e.Email == company.Email);
+        if (userInDb != null)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Email already exists!!! ");
+        }
 
         if (requestBody.UploadFile == null)
         {
             throw new CException(StatusCodes.Status400BadRequest, "Logo of company is not null ");
         }
         company.Logo = await _fileService.UploadFile(requestBody.UploadFile);
-        company.Status = (int)CompanyEnum.CompanyStatus.Pending;
-        company.Premium = (int?)CompanyEnum.CompanyPremium.NotPremium;
+        company.Status = (int)CompanyEnum.CompanyStatus.Verifying;
+        company.IsPremium = false;
+        company.Password = BCrypt.Net.BCrypt.HashPassword(company.Password);
         await _companyRepository.InsertAsync(company);
         await _companyRepository.SaveChangesAsync();
+        var roleId = _roleRepository.GetFirstOrDefaultAsync(r => r.Name == "COMPANY").Result.Id;
+        var user = new User
+        {
+            Email = company.Email,
+            Phone = company.Phone,
+            Password = company.Password,
+            RoleId = roleId,
+            CompanyId = company.Id,
+            Status = (int)UserEnum.UserStatus.Verifying,
+        };
+        await _userRepository.InsertAsync(user);
+        await _userRepository.SaveChangesAsync();
+        // Sent noti
+        Dictionary<string, string> data = new Dictionary<string, string>()
+        {
+            { "type", "admin" },
+            { "CompanyId", company.Id.ToString() }
+        };
+        await PushNotification.SendMessage("eba11598-4e4e-485f-8e94-eeb6a81b8e1f", $"Xét duyệt tài khoản công ty .",
+            $"Công ty {company.Name}  đang yêu cầu xét duyệt.", data);
+        
         var companyDetail = _mapper.Map<GetCompanyDetail>(company);
         return companyDetail;
     }
@@ -129,7 +178,7 @@ public class CompanyService : ICompanyService
         company = _mapper.Map(requestBody, company);
         _companyRepository.Update(company);
         await _companyRepository.SaveChangesAsync();
-        if (requestBody.Premium == 1)
+        if (requestBody.IsPremium == true)
         {
             var wallet = await _walletRepository.GetFirstOrDefaultAsync(w => w.CompanyId == company.Id);
             wallet.Balance -= _upgrade;
@@ -154,7 +203,61 @@ public class CompanyService : ICompanyService
         var companyDetail = _mapper.Map<GetCompanyDetail>(company);
         return companyDetail;
     }
-    public async Task DeleteCompanyAsync(Guid id)
+    
+    public async Task<string> UpdatePasswordCompanyAsync(Guid id, string currentPassword, string newPassword)
+    {
+        var company = await _companyRepository.GetFirstOrDefaultAsync(alu => alu.Id == id);
+        if (company == null)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Please enter the correct information!!! ");
+        }
+        bool isValidPassword = BCrypt.Net.BCrypt.Verify(currentPassword, company.Password);
+        if (!isValidPassword)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Current password not correct!!! ");
+        }
+        if (currentPassword == newPassword)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Current password equal new password!!! ");
+        }
+        var newPasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        company.Password = newPasswordHash;
+        _companyRepository.Update(company);
+        await _companyRepository.SaveChangesAsync();
+        
+        var roleId = _roleRepository.GetFirstOrDefaultAsync(r => r.Name == "COMPANY").Result.Id;
+        var tempUser = await _userRepository.GetFirstOrDefaultAsync(u => u.Email == company.Email && u.RoleId == roleId);
+        tempUser.Password = newPasswordHash;
+        _userRepository.Update(tempUser);
+        await _userRepository.SaveChangesAsync();
+        
+        return "Update password success!!!";
+    }
+    public async Task<string> ForgetPasswordCompanyAsync(string email, int otp, string newPassword)
+    {
+        var company = await _companyRepository.GetFirstOrDefaultAsync(alu => alu.Email == email);
+        if (company == null)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Your email does not have a valid account!!! ");
+        }
+        if (otp != company.Code)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Invalid code!!! ");
+        }
+        var newPasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        company.Password = newPasswordHash;
+        _companyRepository.Update(company);
+        await _companyRepository.SaveChangesAsync();
+        
+        var roleId = _roleRepository.GetFirstOrDefaultAsync(r => r.Name == "COMPANY").Result.Id;
+        var tempUser = await _userRepository.GetFirstOrDefaultAsync(u => u.Phone == company.Phone && u.RoleId == roleId);
+        tempUser.Password = newPasswordHash;
+        _userRepository.Update(tempUser);
+        await _userRepository.SaveChangesAsync();
+        
+        return "Update password success!!!";
+    }
+    public async Task DeleteCompanyAsync(Guid id, UpdateReason updateReason)
     {
         Company company = await _companyRepository.GetFirstOrDefaultAsync(alu => alu.Id == id);
         if (company == null)
@@ -162,11 +265,33 @@ public class CompanyService : ICompanyService
             throw new CException(StatusCodes.Status400BadRequest, "Please enter the correct information!!! ");
         }
         company.Status = (int)CompanyEnum.CompanyStatus.Inactive;
+        company.Reason = updateReason.Reason;
+        _companyRepository.Update(company);
         await _companyRepository.SaveChangesAsync();
-        String phone = company.Phone;
-        User tempUser = await _userRepository.GetFirstOrDefaultAsync(alu => alu.Phone == phone);
-        tempUser.Status = (int?)UserEnum.UserStatus.Inactive;
+        
+        var companyId = company.Id;
+        var user = await _userRepository.GetFirstOrDefaultAsync(alu => alu.CompanyId == companyId);
+        user.Status = (int?)UserEnum.UserStatus.Inactive;
+        user.Reason = updateReason.Reason;
+        _userRepository.Update(user);
         await _userRepository.SaveChangesAsync();
+        
+        var listEmployee = _employeeRepository.Get(jp => jp.CompanyId == companyId);
+        foreach (var employee in listEmployee)
+        {
+            employee.Status = (int)EmployeeEnum.EmployeeStatus.Inactive;
+            employee.Reason = updateReason.Reason;
+            _employeeRepository.Update(employee);
+        }
+        await _employeeRepository.SaveChangesAsync();
+        
+        var listJobPost = _jobPostRepository.Get(jp => jp.CompanyId == companyId);
+        foreach (var jobPost in listJobPost)
+        {
+            jobPost.Status = (int)JobPostEnum.JobPostStatus.Hidden;
+            _jobPostRepository.Update(jobPost);
+        }
+        await _jobPostRepository.SaveChangesAsync();
     }
 
     public async Task<int> GetTotal()

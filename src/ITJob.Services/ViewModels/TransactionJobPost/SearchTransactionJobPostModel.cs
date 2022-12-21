@@ -5,8 +5,10 @@ namespace ITJob.Services.ViewModels.TransactionJobPost;
 public class SearchTransactionJobPostModel
 {
     [DefaultValue("")]
-    public DateTime? Createdate { get; set; } = null;
     public string? TypeOfTransaction { get; set; } = "";
     public Guid? JobPostId { get; set; } = null;
-    public Guid? TransactionId { get; set; } = null;
+    public Guid? CreateBy { get; set; } = null;
+    public DateTime? FromDate { get; set; } = null;
+    public DateTime? ToDate { get; set; } = null;
+    public Guid? TransactionId { get; set; }
 }

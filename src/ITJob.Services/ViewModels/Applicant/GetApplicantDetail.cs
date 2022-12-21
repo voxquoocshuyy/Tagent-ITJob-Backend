@@ -11,5 +11,6 @@ public class GetApplicantDetail
     public DateTime? Dob { get; set; } = null!;
     public string? Address { get; set; } = null!;
     public int? Status { get; set; } = null;
-    public int? IsEarningMoney { get; set; } = null;
+    public int? EarnMoney { get; set; } = null;
+    public string? Reason { get; set; }
 }

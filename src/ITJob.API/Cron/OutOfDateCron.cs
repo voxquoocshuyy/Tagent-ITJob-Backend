@@ -25,7 +25,7 @@ public class OutOfDateCron : IJob
     /// <param name="context"></param>
     public async Task Execute(IJobExecutionContext context)
     {
-        Console.WriteLine("--OutOfDate Job Post");
+        Console.WriteLine("--Out Of Date Job Post");
         await _jobPostService.OutOfDateJob();
     }
 }

@@ -1,4 +1,4 @@
-namespace ITJob.Services.VNPay;
+namespace ITJob.Services.Services.VNPay;
 
 public class BusinessPayment
 {

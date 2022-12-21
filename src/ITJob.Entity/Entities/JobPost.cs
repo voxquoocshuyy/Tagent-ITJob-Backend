@@ -28,8 +28,10 @@ namespace ITJob.Entity.Entities
         public string? Reason { get; set; }
         public double? Money { get; set; }
         public DateTime? ApproveDate { get; set; }
+        public Guid? EmployeeId { get; set; }
 
         public virtual Company? Company { get; set; }
+        public virtual Employee? Employee { get; set; }
         public virtual JobPosition? JobPosition { get; set; }
         public virtual WorkingStyle? WorkingStyle { get; set; }
         public virtual ICollection<AlbumImage> AlbumImages { get; set; }

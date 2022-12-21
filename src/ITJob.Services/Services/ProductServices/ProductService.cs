@@ -97,7 +97,8 @@ public class ProductService : IProductService
         {
             throw new CException(StatusCodes.Status400BadRequest, "Please enter the correct information!!! ");
         }
-        _productRepository.Delete(product);
+        product.Status = (int?)ProductEnum.ProductStatus.Inactive;
+        _productRepository.Update(product);
         await _productRepository.SaveChangesAsync();
     }
 

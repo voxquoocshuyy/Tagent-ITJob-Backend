@@ -1,33 +1,34 @@
 using ITJob.Entity.Entities;
-using ITJob.Entity.Repositories.AlbumImageRepositories;
-using ITJob.Entity.Repositories.ApplicantRepositories;
 using ITJob.Entity.Repositories.CompanyRepositories;
+using ITJob.Entity.Repositories.EmployeeRepositories;
 using ITJob.Entity.Repositories.UserRepositories;
 using ITJob.Entity.Repositories.WalletRepositories;
 using ITJob.Services.Enum;
+using ITJob.Services.Services.ConfirmMailServices;
 using ITJob.Services.Utility.ErrorHandling.Object;
-using ITJob.Services.ViewModels.Company;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace ITJob.Services.Services.ConfirmMailServices;
+namespace ITJob.Services.Services.MailServices;
 
-public class ConfirmMailService : IConfirmMailService
+public class MailService : IMailService
 {
     private readonly IConfiguration _config;
     private readonly ICompanyRepository _companyRepository;
     private readonly IUserRepository _userRepository;
     private readonly IWalletRepository _walletRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public ConfirmMailService(IConfiguration configuration, IUserRepository userRepository, ICompanyRepository companyRepository,
-        IWalletRepository walletRepository)
+    public MailService(IConfiguration configuration, IUserRepository userRepository, ICompanyRepository companyRepository,
+        IWalletRepository walletRepository, IEmployeeRepository employeeRepository)
     {
         _config = configuration;
         _userRepository = userRepository;
         _companyRepository = companyRepository;
         _walletRepository = walletRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public async Task<string> SendMailToAdminForCreateCompany(string email)
@@ -52,25 +53,37 @@ public class ConfirmMailService : IConfirmMailService
         var to = new EmailAddress(_config["Twilio:MyAdminEmail"], "Admin");
         var plainTextContent = "This email for confirm your account company ";
         var content = plainTextContent + info;
-        var htmlContent = "<strong>This email for confirm your company: </strong> " + info + "<br>" +
-                          "<strong>Please check information of this company: </strong>";
+        var htmlContent ="<img src=" + '"' + _config["SystemConfiguration:Logo"] + '"' + ">" +"<br>"+
+                         "<strong>Thank you for trusting and using tagent recruitment platform. </strong>" +"<br>" +
+                         "<strong>This email for confirm your company: </strong> " + info + "<br>" +
+                         "<strong>Please check information of this company: </strong>";
         var msg = MailHelper.CreateSingleEmail(from, to, subject, content , htmlContent);
         await client.SendEmailAsync(msg);
         return "send mail to " + email + " success!!!";
     }
-    public async Task<string> SendMailToAdminForCreateUser(string email)
+    public async Task<string> SendMailToEmployeeForCreateAccount(string email, string password)
     {
+        var employee = await _employeeRepository.GetFirstOrDefaultAsync(c => c.Email == email);
+        var name = employee.Name;
+        var phone = employee.Phone;
+        var info = "<strong>Email: </strong> " + email + "<br>" +
+                   "<strong>Name: </strong> " + name + "<br>" +
+                   "<strong>Phone: </strong> " + phone + "<br>" +
+                   "<strong>Password: </strong>"+ password + "<br>";
         var apiKey = _config["Twilio:MyAPIKey"];
         var client = new SendGridClient(apiKey);
         var from = new EmailAddress(_config["Twilio:MyTwilioEmail"], "Quoc Huy");
         var subject = "Sending by IT Job ";
-        var to = new EmailAddress(_config["Twilio:MyAdminEmail"], "Admin");
-        var plainTextContent = "This email for confirm your account user "+ email +" want to create account";
-        var htmlContent = "<strong>This email for confirm your account user "+ email +" want to create account. </strong> <br>" +
-                          "<strong>Please check information of this user!!! </strong>";
-        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
+        var to = new EmailAddress(email, "Employee");
+        var plainTextContent = "This email for confirm your account company ";
+        var content = plainTextContent + info;
+        var htmlContent = "<img src=" + '"' + _config["SystemConfiguration:Logo"] + '"' + ">" +"<br>"+
+            "<strong>Thank you for trusting and using tagent recruitment platform. " +"<br>" +
+            "Your employee account has been created: </strong> "+ "<br>" + info + "<br>" +
+                          "<strong> You can login to Tagent IT with this email and password.</strong>";
+        var msg = MailHelper.CreateSingleEmail(from, to, subject, content , htmlContent);
         await client.SendEmailAsync(msg);
-        return "send mail to admin success!!!";
+        return "send mail to " + email + " success!!!";
     }
     public async Task<string> SendMailToAdminForApplicantEarn(string email)
     {
@@ -80,30 +93,35 @@ public class ConfirmMailService : IConfirmMailService
         var subject = "Sending by IT Job ";
         var to = new EmailAddress(_config["Twilio:MyAdminEmail"], "Admin");
         var plainTextContent = "This email for confirm your applicant user"+ email +" want to make money ";
-        var htmlContent = "<strong>This email for confirm your applicant user"+ email +" want to make money. </strong> <br>" +
-                          "<strong>Please check information of this applicant!!! </strong>";
+        var htmlContent ="<img src=" + '"' + _config["SystemConfiguration:Logo"] + '"' + ">" +"<br>"+
+                         "<strong>Thank you for trusting and using tagent recruitment platform. </strong>" +"<br>" +
+                         "<strong>This email for confirm your applicant user"+ email +" want to make money. </strong> <br>" +
+                         "<strong>Please check information of this applicant!!! </strong>";
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
         await client.SendEmailAsync(msg);
         return "send mail to admin success!!!";
     }
-    public async Task<string> SendMailToCompany(string email)
+    public async Task<string> SendMailForConfirmMail(string email)
     {
         var min = 1111;
         var max = 9999;
         Random rdm = new Random();
         var code = rdm.Next(min, max);
-        User user = await _userRepository.GetFirstOrDefaultAsync(c => c.Email == email);
-        user.Code = code;
-        _userRepository.Update(user);
-        await _userRepository.SaveChangesAsync();
+        var company = await _companyRepository.GetFirstOrDefaultAsync(c => c.Email == email);
+        company.Code = code;
+        _companyRepository.Update(company);
+        await _companyRepository.SaveChangesAsync();
+        
         var apiKey = _config["Twilio:MyAPIKey"];
         var client = new SendGridClient(apiKey);
         var from = new EmailAddress(_config["Twilio:MyTwilioEmail"], "Quoc Huy");
         var subject = "Sending by IT Job ";
         var to = new EmailAddress(email, "Company");
         var plainTextContent = "This email for confirm your email";
-        var htmlContent = "<strong>This email for confirm your email. </strong>"
-                          + "Please verify this email by this code: </br> " + code;
+        var htmlContent ="<img src=" + '"' + _config["SystemConfiguration:Logo"] + '"' + ">" +"<br>"+
+                         "<strong>Thank you for trusting and using tagent recruitment platform. </strong>" +"<br>" +
+                         "<strong>This email for confirm your email. </strong>"
+                         + "Please verify this email by this code: </br> " + code;
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
         await client.SendEmailAsync(msg);
         return "send mail to " + email + " success!!!";
@@ -115,8 +133,10 @@ public class ConfirmMailService : IConfirmMailService
         var from = new EmailAddress(_config["Twilio:MyTwilioEmail"], "Quoc Huy");
         var subject = "Sending by IT Job ";
         var to = new EmailAddress(email, "Company");
-        var plainTextContent = "This email for congratulations you have successfully created an account ";
-        var htmlContent = "<strong>This email for congratulations you have successfully created an account </strong>";
+        var plainTextContent = "This email for congratulations you have successfully created a company ";
+        var htmlContent = "<img src=" + '"' + _config["SystemConfiguration:Logo"] + '"' + ">" +"<br>"+
+                          "<strong>Thank you for trusting and using tagent recruitment platform. </strong>" +"<br>" +
+                          "<strong>This email for congratulations you have successfully created a company </strong>";
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
         await client.SendEmailAsync(msg);
         return "send mail to " + email + " success!!!";
@@ -128,48 +148,26 @@ public class ConfirmMailService : IConfirmMailService
         var from = new EmailAddress(_config["Twilio:MyTwilioEmail"], "Quoc Huy");
         var subject = "Sending by IT Job ";
         var to = new EmailAddress(email, "Company");
-        var plainTextContent = "This email for sorry you don't have enough information to create an account ";
-        var htmlContent = "<strong>This email for sorry you don't have enough information to create an account  </strong>";
-        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
-        await client.SendEmailAsync(msg);
-        return "send mail to " + email + " success!!!";
-    }
-    
-    public async Task<string> SendMailToUserForJoinSuccess(string email)
-    {
-        var apiKey = _config["Twilio:MyAPIKey"];
-        var client = new SendGridClient(apiKey);
-        var from = new EmailAddress(_config["Twilio:MyTwilioEmail"], "Quoc Huy");
-        var subject = "Sending by IT Job ";
-        var to = new EmailAddress(email, "Company");
-        var plainTextContent = "This email for congratulations you have successfully joined to your company ";
-        var htmlContent = "<strong>This email for congratulations you have successfully joined to your company </strong>";
-        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
-        await client.SendEmailAsync(msg);
-        return "send mail to " + email + " success!!!";
-    }
-    public async Task<string> SendMailToUserForJoinFail(string email)
-    {
-        var apiKey = _config["Twilio:MyAPIKey"];
-        var client = new SendGridClient(apiKey);
-        var from = new EmailAddress(_config["Twilio:MyTwilioEmail"], "Quoc Huy");
-        var subject = "Sending by IT Job ";
-        var to = new EmailAddress(email, "Company");
-        var plainTextContent = "This email for sorry you don't have enough information to join to your company ";
-        var htmlContent = "<strong>This email for sorry you don't have enough information to join to your company  </strong>";
+        var plainTextContent = "This email for sorry you don't have enough information to create a company ";
+        var htmlContent = "<img src=" + '"' + _config["SystemConfiguration:Logo"] + '"' + ">" +"<br>"+
+                          "<strong>Thank you for trusting and using tagent recruitment platform. </strong>" +"<br>" +
+                          "<strong>This email for sorry you don't have enough information to create a company  </strong>";
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent , htmlContent);
         await client.SendEmailAsync(msg);
         return "send mail to " + email + " success!!!";
     }
     public async Task<string> VerifyEmail(int code, string email)
     {
-        User user = await _userRepository.GetFirstOrDefaultAsync(c => c.Email == email);
-        if (user.Code == code)
+        var company = await _companyRepository.GetFirstOrDefaultAsync(c => c.Email == email);
+        var user = await _userRepository.GetFirstOrDefaultAsync(u => u.CompanyId == company.Id);
+        if (company.Code == code)
         {
-            user.Status = (int)UserEnum.UserStatus.Verified;
+            company.Status = (int)CompanyEnum.CompanyStatus.Pending;
+            _companyRepository.Update(company);
+            await _companyRepository.SaveChangesAsync();
+            user.Status = (int)UserEnum.UserStatus.Pending;
             _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
-        }
+            await _userRepository.SaveChangesAsync();     }
         else
         {
             throw new CException(StatusCodes.Status400BadRequest, "Invalid code!!! ");
@@ -178,13 +176,17 @@ public class ConfirmMailService : IConfirmMailService
     }
     public async Task<string> ConfirmCreateCompany(string email)
     {
-        Company company = await _companyRepository.GetFirstOrDefaultAsync(c => c.Email == email);
+        User user = await _userRepository.GetFirstOrDefaultAsync(c => c.Email == email);
+        Company company = await _companyRepository.GetFirstOrDefaultAsync(c => c.Id == user.CompanyId);
         company.Status = (int)CompanyEnum.CompanyStatus.Active;
         _companyRepository.Update(company);
         await _companyRepository.SaveChangesAsync();
+        user.Status = (int)UserEnum.UserStatus.Active;
+        _userRepository.Update(user);
+        await _userRepository.SaveChangesAsync();
         var wallet = new Wallet
         {
-            Balance = 0,
+            Balance = (double)0,
             Status = (int?)WalletEnum.WalletStatus.Active,
             CompanyId = company.Id,
         };
@@ -194,24 +196,12 @@ public class ConfirmMailService : IConfirmMailService
     }
     public async Task<string> RejectCreateCompany(string email)
     {
-        Company company = await _companyRepository.GetFirstOrDefaultAsync(u => u.Email == email);
+        var user = await _userRepository.GetFirstOrDefaultAsync(c => c.Email == email);
+        _userRepository.Delete(user);
+        await _userRepository.SaveChangesAsync();
+        
+        var company = await _companyRepository.GetFirstOrDefaultAsync(u => u.Id == user.CompanyId);
         _companyRepository.Delete(company);
-        await _companyRepository.SaveChangesAsync();
-        return "Reject success!!!";
-    }
-    
-    public async Task<string> ConfirmJoinCompany(string email)
-    {
-        User user = await _userRepository.GetFirstOrDefaultAsync(c => c.Email == email);
-        user.Status = (int)UserEnum.UserStatus.Active;
-        _userRepository.Update(user);
-        await _companyRepository.SaveChangesAsync();
-        return "Confirm success!!!";
-    }
-    public async Task<string> RejectJoinCompany(string email)
-    {
-        User user = await _userRepository.GetFirstOrDefaultAsync(u => u.Email == email);
-        user.Status = (int)UserEnum.UserStatus.Inactive;
         await _companyRepository.SaveChangesAsync();
         return "Reject success!!!";
     }

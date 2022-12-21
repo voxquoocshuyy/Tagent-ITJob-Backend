@@ -8,5 +8,6 @@ public class GetUserDetail
     public int? Status { get; set; }
     public Guid? RoleId { get; set; }
     public string? Password { get; set; }
-    public Guid? CompanyId { get; set; } = null;
+    public Guid? CompanyId { get; set; }
+    public string? Reason { get; set; }
 }

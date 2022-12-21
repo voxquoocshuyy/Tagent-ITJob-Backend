@@ -8,7 +8,7 @@ namespace ITJob.Entity.Entities
         public Guid Id { get; set; }
         public Guid? CompanyId { get; set; }
         public Guid? ApplicantId { get; set; }
-        public string? BlockBy { get; set; }
+        public Guid? BlockBy { get; set; }
         public DateTime? CreateDate { get; set; }
 
         public virtual Applicant? Applicant { get; set; }

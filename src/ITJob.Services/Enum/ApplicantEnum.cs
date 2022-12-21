@@ -29,7 +29,12 @@ public static class ApplicantEnum
         /// <summary>
         /// Status for earn money
         /// </summary>
-        Earn = 1
+        Earn = 1,
+        
+        /// <summary>
+        /// Status for pending earn money
+        /// </summary>
+        Pending = 2,
     }
     public enum ApplicantSort
     {

@@ -1,6 +1,7 @@
 using ITJob.Services.Enum;
 using ITJob.Services.Utility.Paging;
 using ITJob.Services.ViewModels.Applicant;
+using ITJob.Services.ViewModels.Company;
 
 namespace ITJob.Services.Services.ApplicantServices;
 
@@ -56,14 +57,15 @@ public interface IApplicantService
     /// <param name="otp"></param>
     /// <param name="newPassword"></param>
     /// <returns>Msg</returns>>
-    public Task<string> ForgetPasswordApplicantAsync(string phone, string otp, string newPassword);
-    
+    public Task<string> ForgetPasswordApplicantAsync(string phone, int otp, string newPassword);
+
     /// <summary>
     /// Delete Applicant - Change Status to Inactive
     /// </summary>
     /// <param name="id">ID of Applicant</param>
+    /// <param name="updateReason"></param>
     /// <returns></returns>
-    public Task DeleteApplicantAsync(Guid id);
+    public Task DeleteApplicantAsync(Guid id, UpdateReason updateReason);
     
     /// <summary>
     /// Get total of Applicant

@@ -11,6 +11,7 @@ public class SearchJobPostModel
     public int? Status { get; set; } = null;
     public Guid? CompanyId { get; set; } = null;
     public Guid? JobPositionId { get; set; } = null;
+    public Guid? EmployeeId { get; set; } = null;
     public Guid? WorkingStyleId { get; set; } = null;
     public string? WorkingPlace { get; set; } = "";
     public DateTime? StartTime { get; set; } = null;

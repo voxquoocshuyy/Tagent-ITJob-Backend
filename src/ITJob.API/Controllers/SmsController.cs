@@ -43,7 +43,7 @@ public class SmsController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> VerifyOtp(string code, string phone)
+    public async Task<IActionResult> VerifyOtp(int code, string phone)
     {
         string result = await _sendSmsService.Verify(code, phone);
         return Ok(result);

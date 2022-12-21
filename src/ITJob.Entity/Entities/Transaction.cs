@@ -16,7 +16,10 @@ namespace ITJob.Entity.Entities
         public Guid? CreateBy { get; set; }
         public Guid? WalletId { get; set; }
         public double? Total { get; set; }
+        public Guid? ProductId { get; set; }
+        public int? Quantity { get; set; }
 
+        public virtual Product? Product { get; set; }
         public virtual Wallet? Wallet { get; set; }
         public virtual ICollection<TransactionJobPost> TransactionJobPosts { get; set; }
     }

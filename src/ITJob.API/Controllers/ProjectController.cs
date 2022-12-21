@@ -79,7 +79,7 @@ public class ProjectController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for create project
+    /// [Applicant] Endpoint for create project
     /// </summary>
     /// <param name="requestBody">An obj contains input info of an project.</param>
     /// <returns>A project within status 201 or error status.</returns>
@@ -87,6 +87,7 @@ public class ProjectController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetProjectDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateProject([FromBody] CreateProjectModel requestBody)
     {
@@ -101,7 +102,7 @@ public class ProjectController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit project.
+    /// [Applicant] Endpoint for Admin edit project.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains update info of an project.</param>
@@ -110,6 +111,7 @@ public class ProjectController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPut]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetProjectDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateProjectAsync(Guid id, [FromBody] UpdateProjectModel requestBody)
     {
@@ -132,7 +134,7 @@ public class ProjectController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for Admin Delete a project.
+    /// [Applicant] Endpoint for Admin Delete a project.
     /// </summary>
     /// <param name="id">ID of project</param>
     /// <returns>A project within status 200 or 204 status.</returns>
@@ -140,6 +142,7 @@ public class ProjectController : ControllerBase
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

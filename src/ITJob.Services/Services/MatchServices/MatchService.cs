@@ -5,6 +5,7 @@ using ITJob.Entity.Repositories.CompanyRepositories;
 using ITJob.Entity.Repositories.JobPostRepositories;
 using ITJob.Entity.Repositories.LikeRepositories;
 using ITJob.Entity.Repositories.ProfileApplicantRepositories;
+using ITJob.Entity.Repositories.WorkingStyleRepositories;
 using ITJob.Services.Enum;
 using ITJob.Services.Utility;
 using ITJob.Services.Utility.Paging;
@@ -29,9 +30,10 @@ public class MatchService : IMatchService
     private readonly ICompanyRepository _companyRepository;
     private readonly IBlockRepository _blockRepository;
     private readonly IApplicantRepository _applicantRepository;
+    private readonly IWorkingStyleRepository _workingStyleRepository;
 
     public MatchService(IMapper mapper, IJobPostRepository jobPostRepository, IProfileApplicantRepository profileApplicantRepository,
-        ILikeRepository likeRepository, IConfiguration config, ICompanyRepository companyRepository, IBlockRepository blockRepository, IApplicantRepository applicantRepository)
+        ILikeRepository likeRepository, IConfiguration config, ICompanyRepository companyRepository, IBlockRepository blockRepository, IApplicantRepository applicantRepository, IWorkingStyleRepository workingStyleRepository)
     {
         _mapper = mapper;
         _jobPostRepository = jobPostRepository;
@@ -44,13 +46,16 @@ public class MatchService : IMatchService
         _companyRepository = companyRepository;
         _blockRepository = blockRepository;
         _applicantRepository = applicantRepository;
+        _workingStyleRepository = workingStyleRepository;
     }
 
     // SUPPORT FUNCTION ----------
     private async Task<IQueryable<GetJobPostDetail>> CalculatorTotalScoreForProfileApplicant(Guid profileApplicantId)
     {
-        var remote = new Guid("1c6f1759-bb5e-475f-87bd-2d1a431c6eac");
-        var freelance = new Guid("014c14c9-86a2-430c-91d2-49923cea0d10");
+        var remote = _workingStyleRepository.Get(w => w.Name == "Remote")
+            .Select(w => w.Id).FirstOrDefault();
+        var freelance = _workingStyleRepository.Get(w => w.Name == "Freelance")
+            .Select(w => w.Id).FirstOrDefault();
         var profileApplicant = await _profileApplicantRepository.Get( pa => pa.Id == profileApplicantId)
             .Include(pa => pa.ProfileApplicantSkills)
             .Include(pa => pa.Applicant).FirstOrDefaultAsync();
@@ -96,7 +101,8 @@ public class MatchService : IMatchService
                 jobPost.Score = score;
             }
         }
-        var listSorted = listJobPostScore.OrderByDescending(jp => jp.Score).AsQueryable();       
+        var listSorted = listJobPostScore.OrderBy(jp => jp.Score).AsQueryable(); 
+        
         var jobPostDetail = _mapper.ProjectTo<GetJobPostDetail>(listSorted);
 
         return jobPostDetail;
@@ -104,22 +110,26 @@ public class MatchService : IMatchService
     
     private async Task<IQueryable<GetProfileApplicantDetail>> CalculatorTotalScoreForJobPost(Guid jobPostId)
     {
-        var remote = new Guid("1c6f1759-bb5e-475f-87bd-2d1a431c6eac");
-        var freelance = new Guid("014c14c9-86a2-430c-91d2-49923cea0d10");
+        var remote = _workingStyleRepository.Get(w => w.Name == "Remote")
+            .Select(w => w.Id).FirstOrDefault();
+        var freelance = _workingStyleRepository.Get(w => w.Name == "Freelance")
+            .Select(w => w.Id).FirstOrDefault();
         var jobPost = await _jobPostRepository.Get( pa => pa.Id == jobPostId)
             .Include(pa => pa.JobPostSkills).FirstOrDefaultAsync();
 
         var listSkillOfJobPost = jobPost!.JobPostSkills.Select(s => s.SkillId).ToList();
-
         var queryProfileApplicantDetailAll =
             _profileApplicantRepository.GetAll()
                 .Include(pa => pa.Applicant)
                 .Include(pa => pa.ProfileApplicantSkills)
                 .Where(pa => pa.Status == 0).ToList();
+        
         var listProfileApplicantScore = _mapper.ProjectTo<ProfileApplicantScore>(queryProfileApplicantDetailAll.AsQueryable()).ToList();
+        
         var locationOfJobPost = jobPost.WorkingPlace;
         var splitOfJobPost = locationOfJobPost?.Split(", ");
         var cityOfJobPost = splitOfJobPost?[1];
+        
         foreach (var profileApplicant in listProfileApplicantScore)
         {
             var locationOfProfileApplicant = profileApplicant.Applicant?.Address;
@@ -127,6 +137,7 @@ public class MatchService : IMatchService
             var cityOfProfileApplicant = splitOfProfileApplicant?[1];
 
             var score = _scoreDefault;
+            
             if ((jobPost.WorkingStyleId != remote || jobPost.WorkingStyleId != freelance) &&
                 cityOfProfileApplicant != cityOfJobPost)
             {
@@ -170,23 +181,31 @@ public class MatchService : IMatchService
         var listJobPost = await CalculatorTotalScoreForProfileApplicant(profileApplicantId);
         //get like
         var queryProfileApplicantLike = _likeRepository.Get(l => l.ProfileApplicantId == profileApplicantId
-                                                                 && l.IsApplicantLike == 1).Select(l => l.JobPostId).ToList();
+                                                                 && l.IsProfileApplicantLike == true)
+                                                                .Select(l => l.JobPostId).ToList();
+        //get match
+        var queryProfileApplicantMatch = _likeRepository.Get(l => l.ProfileApplicantId == profileApplicantId
+                                                                 && l.Match == true)
+                                                                .Select(l => l.JobPostId).ToList();
         //get block
         var listCompanyIdBlock = _blockRepository.Get(b => b.ApplicantId == applicant.Id)
             .Select(b => b.CompanyId).ToList();
-        //apply like
-        var query = listJobPost.Where(jp => !queryProfileApplicantLike.Contains(jp.Id));
-        //apply block
+        // apply except like
+        var query = listJobPost.Where(jp => !queryProfileApplicantLike.Contains(jp.Id)
+        && !queryProfileApplicantMatch.Contains(jp.Id));
+        // apply except block
         query = query.Where(jp => !listCompanyIdBlock.Contains(jp.CompanyId));
         
-        query = query.GetWithSearch(searchJobPostModel);
+        // query = query.GetWithSearch(searchJobPostModel);
         // Apply sort
-        query = query.GetWithSorting(paginationModel.SortKey.ToString(), paginationModel.SortOrder);
+        // query = query.GetWithSorting(paginationModel.SortKey.ToString(), paginationModel.SortOrder);
+        
         // Apply Paging
-        query = query.GetWithPaging(paginationModel.Page, paginationModel.PageSize).AsQueryable();
+        query.GetWithPaging(paginationModel.Page, paginationModel.PageSize).AsQueryable();
         return query;
 
     }
+    
     public async Task<IQueryable<GetProfileApplicantDetail>> CalculatorTotalScoreForJobPostFilter(Guid jobPostId,
         PagingParam<ProfileApplicantEnum.ProfileApplicantSort> paginationModel, SearchProfileApplicantModel searchProfileApplicantModel)
     {
@@ -197,23 +216,57 @@ public class MatchService : IMatchService
         
         // get like
         var lisApplicantLikeJobPost = _likeRepository.Get(l => l.JobPostId == jobPostId
-                                                                 && l.IsJobPostLike == 1).Select(l => l.ProfileApplicantId).ToList();
+                                                                 && l.IsJobPostLike == true).Select(l => l.ProfileApplicantId).ToList();
+        // get match
+        var lisApplicantMatchJobPost = _likeRepository.Get(l => l.JobPostId == jobPostId
+                                                               && l.Match == true).Select(l => l.ProfileApplicantId).ToList();
         
         // get block
         var listApplicantIdBlock = _blockRepository.Get(b => b.CompanyId == company.Id)
             .Select(b => b.ApplicantId).ToList();
         
         // apply except like
-        var query = listProfileApplicant.Where(pa => !lisApplicantLikeJobPost.Contains(pa.Id));
-        
+        var query = listProfileApplicant.Where(pa => !lisApplicantLikeJobPost.Contains(pa.Id) &&
+            !lisApplicantMatchJobPost.Contains(pa.Id));
         // apply except block
         query = query.Where(pa => !listApplicantIdBlock.Contains(pa.ApplicantId));
         
-        query = query.GetWithSearch(searchProfileApplicantModel);
-        // Apply sort
-        query = query.GetWithSorting(paginationModel.SortKey.ToString(), paginationModel.SortOrder);
+        // query = query.GetWithSearch(searchProfileApplicantModel);
+        // // Apply sort
+        // query = query.GetWithSorting(paginationModel.SortKey.ToString(), paginationModel.SortOrder);
+        
         // Apply Paging
         query = query.GetWithPaging(paginationModel.Page, paginationModel.PageSize).AsQueryable();
         return query;
     }
+    // public async Task<IQueryable<GetProfileApplicantDetail>> CalculatorTotalScoreForJobPostFilterLike(Guid jobPostId,
+    //     PagingParam<ProfileApplicantEnum.ProfileApplicantSort> paginationModel, SearchProfileApplicantModel searchProfileApplicantModel)
+    // {
+    //     var jobPost = await _jobPostRepository.GetFirstOrDefaultAsync(jp => jp.Id == jobPostId);
+    //     var company = await _companyRepository.Get(c => c.Id == jobPost.CompanyId).FirstOrDefaultAsync();
+    //     // get all
+    //     var listProfileApplicant = await CalculatorTotalScoreForJobPost(jobPostId);
+    //     
+    //     // get like
+    //     var lisApplicantLikeJobPost = _likeRepository.Get(l => l.JobPostId == jobPostId
+    //                                                            && l.IsJobPostLike == true).Select(l => l.ProfileApplicantId).ToList();
+    //     
+    //     // get block
+    //     var listApplicantIdBlock = _blockRepository.Get(b => b.CompanyId == company.Id)
+    //         .Select(b => b.ApplicantId).ToList();
+    //     
+    //     // apply except like
+    //     var query = listProfileApplicant.Where(pa => lisApplicantLikeJobPost.Contains(pa.Id));
+    //     
+    //     // apply except block
+    //     query = query.Where(pa => !listApplicantIdBlock.Contains(pa.ApplicantId));
+    //     
+    //     // query = query.GetWithSearch(searchProfileApplicantModel);
+    //     // // Apply sort
+    //     // query = query.GetWithSorting(paginationModel.SortKey.ToString(), paginationModel.SortOrder);
+    //     
+    //     // Apply Paging
+    //     query = query.GetWithPaging(paginationModel.Page, paginationModel.PageSize).AsQueryable();
+    //     return query;
+    // }
 }

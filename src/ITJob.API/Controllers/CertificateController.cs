@@ -79,7 +79,7 @@ public class CertificateController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for create certificate
+    /// [Applicant] Endpoint for create certificate
     /// </summary>
     /// <param name="requestBody">An obj contains input info of an certificate.</param>
     /// <returns>A certificate within status 201 or error status.</returns>
@@ -87,6 +87,7 @@ public class CertificateController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetCertificateDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateCertificate([FromBody] CreateCertificateModel requestBody)
     {
@@ -101,7 +102,7 @@ public class CertificateController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit certificate.
+    /// [Applicant] Endpoint for edit certificate.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains update info of an certificate.</param>
@@ -110,6 +111,7 @@ public class CertificateController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetCertificateDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateCertificateAsync(Guid id, [FromBody] UpdateCertificateModel requestBody)
     {
@@ -132,7 +134,7 @@ public class CertificateController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for Admin Delete a certificate.
+    /// [Applicant] Endpoint for delete a certificate.
     /// </summary>
     /// <param name="id">ID of certificate</param>
     /// <returns>A certificate within status 200 or 204 status.</returns>
@@ -140,6 +142,7 @@ public class CertificateController : ControllerBase
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

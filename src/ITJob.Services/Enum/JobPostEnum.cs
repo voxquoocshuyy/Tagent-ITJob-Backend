@@ -36,6 +36,7 @@ public static class JobPostEnum
         JobPositionId,
         WorkingStyleId,
         WorkingPlace,
-        CreateDate
+        CreateDate,
+        EndTime
     }
 }

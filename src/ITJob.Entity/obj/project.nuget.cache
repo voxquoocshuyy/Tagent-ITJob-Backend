@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "O2M3S7CQEpqJyCR/csZtGKPf4Uqz3IbbNl0QNHkYKd4w4c8kIDuWtt9X9st35VydOD2gquN7xJKxAVI0BJrpag==",
+  "dgSpecHash": "iZaMo1/Sl2oc/V30wHfrFh7gwdXyIXrwkUJEj1ZyQNPc332wTZwk8ClSGZZ5GhF5vOioaLO7ZxYVXEhcV7Koug==",
   "success": true,
   "projectFilePath": "/Users/quochuy/Study/FPT/Capstone/IT-Job-CoreAPI/src/ITJob.Entity/ITJob.Entity.csproj",
   "expectedPackageFiles": [

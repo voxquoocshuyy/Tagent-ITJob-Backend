@@ -33,6 +33,8 @@ public static class AutoMapperConfig
             mc.ConfigWallet();
             mc.ConfigTransaction();
             mc.ConfigTransactionJobPost();
+            mc.ConfigSystemWallet();
+            mc.ConfigEmployee();
         });
 
         IMapper mapper = mappingConfig.CreateMapper();

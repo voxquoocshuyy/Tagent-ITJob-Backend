@@ -12,4 +12,8 @@ public interface IMatchService
     
     public Task<IQueryable<GetProfileApplicantDetail>> CalculatorTotalScoreForJobPostFilter(Guid jobPostId,
         PagingParam<ProfileApplicantEnum.ProfileApplicantSort> paginationModel, SearchProfileApplicantModel searchProfileApplicantModel);
+
+    // public Task<IQueryable<GetProfileApplicantDetail>> CalculatorTotalScoreForJobPostFilterLike(Guid jobPostId,
+    //     PagingParam<ProfileApplicantEnum.ProfileApplicantSort> paginationModel,
+    //     SearchProfileApplicantModel searchProfileApplicantModel);
 }

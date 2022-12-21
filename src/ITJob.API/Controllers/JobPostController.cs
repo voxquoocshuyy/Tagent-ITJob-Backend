@@ -102,6 +102,39 @@ public class JobPostController : ControllerBase
         });
     }
     /// <summary>
+    /// [Guest] Endpoint for get all job post like profile applicant with condition
+    /// </summary>
+    /// <param name="searchJobPostModel"></param>
+    /// <param name="paginationModel">An object contains paging criteria</param>
+    /// <param name="profileApplicantId"></param>
+    /// <returns>List of job post</returns>
+    /// <response code="200">Returns the list of job post</response>
+    /// <response code="204">Returns if list of job post is empty</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpGet("profileApplicant-like")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ModelsResponse<GetJobPostDetail>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetJobPostProfileApplicantLikePage(Guid profileApplicantId,
+        [FromQuery]PagingParam<JobPostEnum.JobPostSort> paginationModel, 
+        [FromQuery]SearchJobPostModel searchJobPostModel)
+    {
+        var result = _jobPostService.
+            GetJobPostProfileApplicantLikePage( paginationModel, searchJobPostModel, profileApplicantId);
+
+        return Ok(new ModelsResponse<GetJobPostDetail>()
+        {
+            Code = StatusCodes.Status200OK,
+            Msg = "Use API get job post sort by system success!",
+            Data = result.ToList(),
+            Paging = new PagingMetadata()
+            {
+                Page = paginationModel.Page,
+                Size = paginationModel.PageSize,
+                Total = result.ToList().Count
+            },
+        });
+    }
+    /// <summary>
     /// [Guest] Endpoint for get all job post with sort by system
     /// </summary>
     /// <param name="profileApplicantId"> an id of profile applicant</param>
@@ -157,7 +190,7 @@ public class JobPostController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for create job post
+    /// [Employee] Endpoint for create job post
     /// </summary>
     /// <param name="requestBody">An obj contains input info of an job post.</param>
     /// <returns>A job post within status 201 or error status.</returns>
@@ -165,6 +198,7 @@ public class JobPostController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="EMPLOYEE")]
     [ProducesResponseType(typeof(BaseResponse<GetJobPostDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateJobPost([FromBody] CreateJobPostModel requestBody)
     {
@@ -179,7 +213,7 @@ public class JobPostController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit job post.
+    /// [Employee] Endpoint for edit job post.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains update info of an job post.</param>
@@ -188,6 +222,7 @@ public class JobPostController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="EMPLOYEE")]
     [ProducesResponseType(typeof(BaseResponse<GetJobPostDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateJobPostAsync(Guid id, [FromBody] UpdateJobPostModel requestBody)
     {
@@ -209,7 +244,69 @@ public class JobPostController : ControllerBase
             
     }
     /// <summary>
-    /// [Admin] Endpoint for Admin approval job post.
+    /// [Employee] Endpoint for edit job post.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="requestBody">An obj contains update info of an job post.</param>
+    /// <returns>A job post within status 200 or error status.</returns>
+    /// <response code="200">Returns job post after update</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpPut("expired/{id}")]
+    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="EMPLOYEE")]
+    [ProducesResponseType(typeof(BaseResponse<GetJobPostDetail>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateJobPostExpiredAsync(Guid id, [FromBody] UpdateJobPostExpriredModel requestBody)
+    {
+        try
+        {
+            GetJobPostDetail updateJobPost = await _jobPostService.UpdateJobPostExpiredAsync(id, requestBody);
+
+            return Ok(new BaseResponse<GetJobPostDetail>()
+            {
+                Code = StatusCodes.Status200OK,
+                Data = updateJobPost,
+                Msg = "Update Successful"
+            });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+            
+    }
+    /// <summary>
+    /// [Employee] Endpoint for employee edit job post.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="requestBody">An obj contains update info of an job post.</param>
+    /// <returns>A job post within status 200 or error status.</returns>
+    /// <response code="200">Returns job post after update</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpPut("money/{id}")]
+    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="EMPLOYEE")]
+    [ProducesResponseType(typeof(BaseResponse<GetJobPostDetail>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateJobPostMoneyAsync(Guid id, [FromBody] UpdateJobPostMoneyModel requestBody)
+    {
+        try
+        {
+            GetJobPostDetail updateJobPost = await _jobPostService.UpdateJobPostMoneyAsync(id, requestBody);
+
+            return Ok(new BaseResponse<GetJobPostDetail>()
+            {
+                Code = StatusCodes.Status200OK,
+                Data = updateJobPost,
+                Msg = "Update Successful"
+            });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+            
+    }
+    /// <summary>
+    /// [Company] Endpoint for company approval job post.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains approval a job post.</param>
@@ -217,7 +314,7 @@ public class JobPostController : ControllerBase
     /// <response code="200">Returns job post after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("approval")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="COMPANY")]
     [ProducesResponseType(typeof(BaseResponse<GetJobPostDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ApprovalJobPostAsync(Guid id, [FromBody] ApprovalJobPostModel requestBody)
     {
@@ -247,8 +344,8 @@ public class JobPostController : ControllerBase
     /// <response code="200">Returns 200 status</response>
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
-    public async Task<IActionResult> DeleteClassAsync(Guid id)
+    [Authorize(Roles ="ADMIN")]
+    public async Task<IActionResult> DeleteJobPostAsync(Guid id)
     {
         try
         {

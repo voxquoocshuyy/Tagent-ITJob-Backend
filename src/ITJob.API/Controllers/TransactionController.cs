@@ -2,6 +2,7 @@ using ITJob.Services.Enum;
 using ITJob.Services.Services.TransactionServices;
 using ITJob.Services.Utility.Paging;
 using ITJob.Services.ViewModels;
+using ITJob.Services.ViewModels.SystemWallet;
 using ITJob.Services.ViewModels.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -84,28 +85,48 @@ public class TransactionController : ControllerBase
             Msg = "Send Request Successful",
         });
     }
+    /// <summary>
+    /// [Guest] Endpoint for get total of system wallet
+    /// </summary>
+    /// <returns>List of transaction</returns>
+    /// <response code="200">Returns the transaction</response>
+    /// <response code="204">Returns if the transaction is not exist</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpGet("system")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(BaseResponse<GetSystemWalletDetail>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSystemWalletDetail()
+    {
+        GetSystemWalletDetail result = await _transactionService.GetSystemWallet();
+
+        return Ok(new BaseResponse<GetSystemWalletDetail>()
+        {
+            Code = StatusCodes.Status200OK,
+            Data = result,
+            Msg = "Send Request Successful",
+        });
+    }
+    /// <summary>
+    /// [Admin] Endpoint for create transaction
+    /// </summary>
+    /// <param name="requestBody">An obj contains input info of a transaction.</param>
+    /// <returns>A transaction within status 201 or error status.</returns>
+    /// <response code="201">Returns the transaction</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpPost]
+    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [ProducesResponseType(typeof(BaseResponse<GetTransactionDetail>), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionModel requestBody)
+    {
+        var result = await _transactionService.CreateTransactionAsync(requestBody);
     
-    // /// <summary>
-    // /// [Admin] Endpoint for create transaction
-    // /// </summary>
-    // /// <param name="requestBody">An obj contains input info of a transaction.</param>
-    // /// <returns>A transaction within status 201 or error status.</returns>
-    // /// <response code="201">Returns the transaction</response>
-    // /// <response code="403">Return if token is access denied</response>
-    // [HttpPost]
-    // // [Authorize(Roles = RolesConstants.ADMIN)]
-    // [ProducesResponseType(typeof(BaseResponse<GetTransactionDetail>), StatusCodes.Status201Created)]
-    // public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionModel requestBody)
-    // {
-    //     var result = await _transactionService.CreateTransactionAsync(requestBody);
-    //
-    //     return Created(string.Empty, new BaseResponse<GetTransactionDetail>()
-    //     {
-    //         Code = StatusCodes.Status201Created,
-    //         Data = result,
-    //         Msg = "Send Request Successful"
-    //     });
-    // }
+        return Created(string.Empty, new BaseResponse<GetTransactionDetail>()
+        {
+            Code = StatusCodes.Status201Created,
+            Data = result,
+            Msg = "Send Request Successful"
+        });
+    }
 
     // /// <summary>
     // /// [Admin] Endpoint for Admin edit transaction.

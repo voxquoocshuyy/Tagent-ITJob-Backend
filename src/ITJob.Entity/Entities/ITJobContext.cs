@@ -21,6 +21,7 @@ namespace ITJob.Entity.Entities
         public virtual DbSet<Block> Blocks { get; set; } = null!;
         public virtual DbSet<Certificate> Certificates { get; set; } = null!;
         public virtual DbSet<Company> Companies { get; set; } = null!;
+        public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<JobPosition> JobPositions { get; set; } = null!;
         public virtual DbSet<JobPost> JobPosts { get; set; } = null!;
         public virtual DbSet<JobPostSkill> JobPostSkills { get; set; } = null!;
@@ -46,7 +47,7 @@ namespace ITJob.Entity.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=15.164.244.155,1433;Initial Catalog=ITJob;User ID=dev-team-it-job;Password=zaQ@1234");
+                optionsBuilder.UseSqlServer("Data Source=13.232.213.53,1433;Initial Catalog=ITJob;User ID=sa;Password=Loyalty@Program");
             }
         }
 
@@ -65,7 +66,7 @@ namespace ITJob.Entity.Entities
                     .HasColumnType("date")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.UrlImage).HasMaxLength(4000);
+                entity.Property(e => e.UrlImage).IsUnicode(false);
 
                 entity.HasOne(d => d.Applicant)
                     .WithMany(p => p.AlbumImages)
@@ -89,28 +90,28 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Address).HasMaxLength(4000);
+                entity.Property(e => e.Address).HasMaxLength(1000);
 
-                entity.Property(e => e.Avatar).HasMaxLength(4000);
+                entity.Property(e => e.Avatar).IsUnicode(false);
 
                 entity.Property(e => e.Dob).HasColumnType("date");
 
-                entity.Property(e => e.Email).HasMaxLength(100);
-
-                entity.Property(e => e.Name).HasMaxLength(4000);
-
-                entity.Property(e => e.Otp)
-                    .HasMaxLength(4)
-                    .IsUnicode(false)
-                    .HasColumnName("OTP");
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Otp).HasColumnName("OTP");
+
+                entity.Property(e => e.Password).IsUnicode(false);
 
                 entity.Property(e => e.Phone)
                     .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Reason).HasMaxLength(1000);
             });
 
             modelBuilder.Entity<Block>(entity =>
@@ -121,10 +122,6 @@ namespace ITJob.Entity.Entities
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-
-                entity.Property(e => e.BlockBy)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -151,7 +148,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.GrantDate).HasColumnType("date");
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Name).HasMaxLength(100);
 
                 entity.HasOne(d => d.ProfileApplicant)
                     .WithMany(p => p.Certificates)
@@ -172,25 +169,56 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Description).HasMaxLength(1000);
 
-                entity.Property(e => e.Email).HasMaxLength(100);
-
-                entity.Property(e => e.Logo)
-                    .HasMaxLength(4000)
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Logo).IsUnicode(false);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Password).IsUnicode(false);
 
                 entity.Property(e => e.Phone)
                     .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Reason).HasMaxLength(1000);
 
                 entity.Property(e => e.TaxCode)
-                    .HasMaxLength(4000)
+                    .HasMaxLength(13)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Website)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.ToTable("Employee");
+
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Password).IsUnicode(false);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Reason).HasMaxLength(1000);
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.CompanyId)
+                    .HasConstraintName("Employee_Company_null_fk");
             });
 
             modelBuilder.Entity<JobPosition>(entity =>
@@ -202,7 +230,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Name).HasMaxLength(100);
             });
 
             modelBuilder.Entity<JobPost>(entity =>
@@ -217,22 +245,25 @@ namespace ITJob.Entity.Entities
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Description).HasMaxLength(4000);
-
                 entity.Property(e => e.EndTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Reason).HasMaxLength(4000);
+                entity.Property(e => e.Reason).HasMaxLength(1000);
 
                 entity.Property(e => e.StartTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Title).HasMaxLength(1000);
+                entity.Property(e => e.Title).HasMaxLength(100);
 
-                entity.Property(e => e.WorkingPlace).HasMaxLength(4000);
+                entity.Property(e => e.WorkingPlace).HasMaxLength(1000);
 
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.JobPosts)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("JobPost_Company_Id_fk");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.JobPosts)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .HasConstraintName("JobPost_Employee_null_fk");
 
                 entity.HasOne(d => d.JobPosition)
                     .WithMany(p => p.JobPosts)
@@ -254,7 +285,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.SkillLevel).HasMaxLength(4000);
+                entity.Property(e => e.SkillLevel).HasMaxLength(100);
 
                 entity.HasOne(d => d.JobPost)
                     .WithMany(p => p.JobPostSkills)
@@ -277,8 +308,10 @@ namespace ITJob.Entity.Entities
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.MatchDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.JobPost)
                     .WithMany(p => p.Likes)
@@ -297,7 +330,9 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Image).IsUnicode(false);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
             });
 
             modelBuilder.Entity<ProfileApplicant>(entity =>
@@ -310,15 +345,21 @@ namespace ITJob.Entity.Entities
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Description).HasMaxLength(4000);
+                entity.Property(e => e.Description).HasMaxLength(1000);
 
-                entity.Property(e => e.Education).HasMaxLength(4000);
+                entity.Property(e => e.Education).HasMaxLength(1000);
 
-                entity.Property(e => e.FacebookLink).HasMaxLength(4000);
+                entity.Property(e => e.FacebookLink)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.GithubLink).HasMaxLength(4000);
+                entity.Property(e => e.GithubLink)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.LinkedInLink).HasMaxLength(4000);
+                entity.Property(e => e.LinkedInLink)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Applicant)
                     .WithMany(p => p.ProfileApplicants)
@@ -345,7 +386,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.SkillLevel).HasMaxLength(4000);
+                entity.Property(e => e.SkillLevel).HasMaxLength(100);
 
                 entity.HasOne(d => d.ProfileApplicant)
                     .WithMany(p => p.ProfileApplicantSkills)
@@ -367,17 +408,17 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Description).HasMaxLength(4000);
+                entity.Property(e => e.Description).HasMaxLength(1000);
 
                 entity.Property(e => e.EndTime).HasColumnType("datetime");
 
-                entity.Property(e => e.JobPosition).HasMaxLength(4000);
+                entity.Property(e => e.JobPosition).HasMaxLength(100);
 
-                entity.Property(e => e.Link).HasMaxLength(4000);
+                entity.Property(e => e.Link).HasMaxLength(1000);
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Name).HasMaxLength(100);
 
-                entity.Property(e => e.Skill).HasMaxLength(4000);
+                entity.Property(e => e.Skill).HasMaxLength(100);
 
                 entity.Property(e => e.StartTime).HasColumnType("datetime");
 
@@ -419,7 +460,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Name).HasMaxLength(100);
             });
 
             modelBuilder.Entity<SkillLevel>(entity =>
@@ -428,7 +469,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Name).HasMaxLength(100);
 
                 entity.HasOne(d => d.SkillGroup)
                     .WithMany(p => p.SkillLevels)
@@ -450,10 +491,15 @@ namespace ITJob.Entity.Entities
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.TypeOfTransaction).HasMaxLength(1000);
+                entity.Property(e => e.TypeOfTransaction).HasMaxLength(100);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("Transaction_Product_null_fk");
 
                 entity.HasOne(d => d.Wallet)
                     .WithMany(p => p.Transactions)
@@ -467,11 +513,11 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Createdate)
-                    .HasColumnType("date")
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.TypeOfTransaction).HasMaxLength(1000);
+                entity.Property(e => e.TypeOfTransaction).HasMaxLength(100);
 
                 entity.HasOne(d => d.JobPost)
                     .WithMany(p => p.TransactionJobPosts)
@@ -488,26 +534,39 @@ namespace ITJob.Entity.Entities
             {
                 entity.ToTable("User");
 
-                entity.HasIndex(e => e.Id, "User_Id_uindex")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Password).HasMaxLength(4000);
+                entity.Property(e => e.Password).IsUnicode(false);
 
-                entity.Property(e => e.Phone).HasMaxLength(11);
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Reason).HasMaxLength(1000);
+
+                entity.HasOne(d => d.Applicant)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.ApplicantId)
+                    .HasConstraintName("User_Applicant_null_fk");
 
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("User_Company_null_fk");
 
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .HasConstraintName("User_Employee_null_fk");
+
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("User_Role_Id_fk");
+                    .HasConstraintName("User_Role_null_fk");
             });
 
             modelBuilder.Entity<Wallet>(entity =>
@@ -537,7 +596,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.CompanyName).HasMaxLength(1000);
+                entity.Property(e => e.CompanyName).HasMaxLength(100);
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
@@ -563,7 +622,7 @@ namespace ITJob.Entity.Entities
 
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.Name).HasMaxLength(1000);
+                entity.Property(e => e.Name).HasMaxLength(100);
             });
 
             OnModelCreatingPartial(modelBuilder);

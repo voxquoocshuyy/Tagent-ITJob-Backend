@@ -3,5 +3,5 @@ namespace ITJob.Services.ViewModels.Applicant;
 public class UpdateEarnMoneyApplicantModel
 {
     public Guid Id { get; set; }
-    public int? IsEarningMoney { get; set; } = null;
+    public int? EarnMoney { get; set; }
 }

@@ -11,6 +11,7 @@ public interface IAlbumImageService
     public Task<GetAlbumImageDetail> GetAlbumImageById(Guid id);
 
     public Task<List<GetAlbumImageDetail>> CreateAlbumImageAsync(CreateAlbumImageModel requestBody);
+    public Task<CreateAlbumImageUrlModel> CreateAlbumImageUrlAsync(CreateAlbumImageUrlModel requestBody);
 
     public Task<GetAlbumImageDetail> UpdateAlbumImageAsync(Guid id, UpdateAlbumImageModel requestBody);
 

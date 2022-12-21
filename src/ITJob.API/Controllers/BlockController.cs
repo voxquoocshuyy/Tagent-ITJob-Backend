@@ -78,14 +78,14 @@ public class BlockController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for create block
+    /// [Applicant] Endpoint for create block
     /// </summary>
     /// <param name="requestBody">An obj contains input info of a block.</param>
     /// <returns>A block within status 201 or error status.</returns>
     /// <response code="201">Returns the block</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetBlockDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateBlock([FromBody] CreateBlockModel requestBody)
     {
@@ -100,7 +100,7 @@ public class BlockController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit block.
+    /// [Applicant] Endpoint for edit block.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains update info of a block.</param>
@@ -108,7 +108,7 @@ public class BlockController : ControllerBase
     /// <response code="200">Returns block after update</response>
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetBlockDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateBlockAsync(Guid id, [FromBody] UpdateBlockModel requestBody)
     {
@@ -131,14 +131,14 @@ public class BlockController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for Admin Delete a block.
+    /// [Applicant] Endpoint for Admin Delete a block.
     /// </summary>
     /// <param name="id">ID of block</param>
     /// <returns>A block within status 200 or 204 status.</returns>
     /// <response code="200">Returns 200 status</response>
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
-    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

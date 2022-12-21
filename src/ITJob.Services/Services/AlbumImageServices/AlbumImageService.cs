@@ -77,6 +77,19 @@ public class AlbumImageService : IAlbumImageService
         List<GetAlbumImageDetail> listResult =  _mapper.ProjectTo<GetAlbumImageDetail>(result.AsQueryable()).ToList();
         return listResult;
     }
+    public async Task<CreateAlbumImageUrlModel> CreateAlbumImageUrlAsync(CreateAlbumImageUrlModel requestBody)
+    {
+        AlbumImage albumImage = _mapper.Map<AlbumImage>(requestBody);
+        if (albumImage == null)
+        {
+            throw new CException(StatusCodes.Status400BadRequest, "Please enter the correct information!!! ");
+        }
+        albumImage.UrlImage = requestBody.UrlImage;
+        await _albumImageRepository.InsertAsync(albumImage);
+        await _albumImageRepository.SaveChangesAsync();
+        CreateAlbumImageUrlModel result = _mapper.Map<CreateAlbumImageUrlModel>(albumImage);
+        return result;
+    }
 
     public async Task<GetAlbumImageDetail> UpdateAlbumImageAsync(Guid id, UpdateAlbumImageModel requestBody)
     {

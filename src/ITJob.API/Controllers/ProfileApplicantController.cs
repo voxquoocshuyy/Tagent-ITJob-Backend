@@ -98,6 +98,7 @@ public class ProfileApplicantController : ControllerBase
             },
         });
     }
+    
     /// <summary>
     /// [Guest] Endpoint for get all profile applicant like job post with condition
     /// </summary>
@@ -115,13 +116,8 @@ public class ProfileApplicantController : ControllerBase
         [FromQuery]PagingParam<ProfileApplicantEnum.ProfileApplicantSort> paginationModel, 
         [FromQuery]SearchProfileApplicantModel searchProfileApplicantModel, Guid jobPostId)
     {
-        IList<GetProfileApplicantDetail> result = _profileApplicantService.GetProfileApplicantLikePage(paginationModel,
+        var result = _profileApplicantService.GetProfileApplicantLikePage(paginationModel,
             searchProfileApplicantModel, jobPostId);
-        int total = await _profileApplicantService.GetTotal();
-        if (!result.Any())
-        {
-            return NoContent();
-        }
 
         return Ok(new ModelsResponse<GetProfileApplicantDetail>()
         {
@@ -132,7 +128,7 @@ public class ProfileApplicantController : ControllerBase
             {
                 Page = paginationModel.Page,
                 Size = paginationModel.PageSize,
-                Total = total
+                Total = result.ToList().Count
             },
         });
     }
@@ -199,7 +195,7 @@ public class ProfileApplicantController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for create profile applicant
+    /// [Applicant] Endpoint for create profile applicant
     /// </summary>
     /// <param name="requestBody">An obj contains input info of an profile applicant.</param>
     /// <returns>A profile applicant within status 201 or error status.</returns>
@@ -207,6 +203,7 @@ public class ProfileApplicantController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetProfileApplicantDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateProfileApplicant([FromBody] CreateProfileApplicantModel requestBody)
     {
@@ -221,7 +218,7 @@ public class ProfileApplicantController : ControllerBase
     }
 
     /// <summary>
-    /// [Admin] Endpoint for Admin edit profile applicant.
+    /// [Applicant] Endpoint for edit profile applicant.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="requestBody">An obj contains update info of an profile applicant.</param>
@@ -230,6 +227,7 @@ public class ProfileApplicantController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPut("id")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetProfileApplicantDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateProfileApplicantAsync(Guid id, [FromBody] UpdateProfileApplicantModel requestBody)
     {
@@ -252,7 +250,7 @@ public class ProfileApplicantController : ControllerBase
     }
     
     /// <summary>
-    /// [Admin] Endpoint for Admin Delete a profile applicant.
+    /// [Applicant] Endpoint for delete a profile applicant.
     /// </summary>
     /// <param name="id">ID of profile applicant</param>
     /// <returns>A profile applicant within status 200 or 204 status.</returns>
@@ -260,6 +258,7 @@ public class ProfileApplicantController : ControllerBase
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

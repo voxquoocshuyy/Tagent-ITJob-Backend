@@ -123,6 +123,31 @@ public class AlbumImageController : ControllerBase
         }
         
     }
+    
+    /// <summary>
+    /// [Admin] Endpoint for create album image
+    /// </summary>
+    /// <param name="requestBody">An obj contains input info of a album image.</param>
+    /// <returns>A album image within status 201 or error status.</returns>
+    /// <response code="201">Returns the album image</response>
+    /// <response code="403">Return if token is access denied</response>
+    [HttpPost("url")]
+    // [Authorize(Roles = RolesConstants.ADMIN)]
+    [ProducesResponseType(typeof(BaseResponse<GetAlbumImageDetail>), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateAlbumImage([FromBody] CreateAlbumImageUrlModel requestBody)
+    {
+        try
+        {
+            var result = await _albumImageService.CreateAlbumImageUrlAsync(requestBody);
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+        
+    }
 
     /// <summary>
     /// [Admin] Endpoint for Admin edit album image.

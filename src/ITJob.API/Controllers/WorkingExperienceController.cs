@@ -88,6 +88,7 @@ public class WorkingExperienceController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetWorkingExperienceDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateWorkingExperience([FromBody] CreateWorkingExperienceModel requestBody)
     {
@@ -111,6 +112,7 @@ public class WorkingExperienceController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPut]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     [ProducesResponseType(typeof(BaseResponse<GetWorkingExperienceDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateWorkingExperienceAsync(Guid id, [FromBody] UpdateWorkingExperienceModel requestBody)
     {
@@ -141,6 +143,7 @@ public class WorkingExperienceController : ControllerBase
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="APPLICANT")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

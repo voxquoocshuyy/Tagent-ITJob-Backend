@@ -7,5 +7,5 @@ public class SearchBlockModel
     [DefaultValue("")]
     public Guid? CompanyId { get; set; } = null;
     public Guid? ApplicantId { get; set; } = null;
-    public string? BlockBy { get; set; } = "";
+    public Guid? BlockBy { get; set; } = null;
 }

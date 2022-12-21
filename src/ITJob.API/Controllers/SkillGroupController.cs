@@ -93,6 +93,7 @@ public class SkillGroupController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPost]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN")]
     [ProducesResponseType(typeof(BaseResponse<GetSkillGroupDetail>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateSkillGroup([FromBody] CreateSkillGroupModel requestBody)
     {
@@ -116,6 +117,7 @@ public class SkillGroupController : ControllerBase
     /// <response code="403">Return if token is access denied</response>
     [HttpPut]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN")]
     [ProducesResponseType(typeof(BaseResponse<GetSkillGroupDetail>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateSkillGroupAsync(Guid id, [FromBody] UpdateSkillGroupModel requestBody)
     {
@@ -146,6 +148,7 @@ public class SkillGroupController : ControllerBase
     /// <response code="204">Returns NoContent status</response>
     [HttpDelete("{id}")]
     // [Authorize(Roles = RolesConstants.ADMIN)]
+    [Authorize(Roles ="ADMIN")]
     public async Task<IActionResult> DeleteClassAsync(Guid id)
     {
         try

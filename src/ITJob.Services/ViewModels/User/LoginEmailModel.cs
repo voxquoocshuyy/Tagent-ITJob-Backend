@@ -1,6 +1,6 @@
 namespace ITJob.Services.ViewModels.User;
 
-public class LoginCompanyModel
+public class LoginEmailModel
 {
     public string Email { get; set; }
     public string Password { get; set; }
