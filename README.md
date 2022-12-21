@@ -19,5 +19,5 @@ VNPay: Payment service <br>
 
 ### Connect me via:
 [My facebook](https://facebook.com/voxquoocshuyy)  
-[My gmail](gmailto: voquochuy1502@gmail.com) <br>
+[My email](gmailto: voquochuy1502@gmail.com) <br>
 © 2022 voxquoocshuyy
