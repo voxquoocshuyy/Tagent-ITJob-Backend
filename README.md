@@ -12,10 +12,14 @@ Visual Code <br>
 Restful API <br>
 .NET core 6 <br>
 ### Implemented technology
+Entity framework <br>
+LINQ <br>
+Auto Mapper <br>
 Firebase: Store messages, photos, send notifications <br>
 Twilio: Send SMS <br>
 SendGrid: Send Mail <br>
 VNPay: Payment service <br>
+Cron: Worker service <br>
 
 ### Connect me via:
 [My facebook](https://facebook.com/voxquoocshuyy)  
